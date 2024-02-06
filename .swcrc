@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json.schemastore.org/swcrc",
+  "module": {
+    "type": "umd"
+  },
+  "sourceMaps": true,
+  "jsc": {
+    "target": "es5",
+    "parser": {
+      "syntax": "typescript",
+      "tsx": true
+    },
+    "transform": {
+      "react": {
+        "runtime": "automatic",
+        "throwIfNamespace": false
+      }
+    },
+    "experimental": {
+      "plugins": [["@swc/plugin-styled-components", {}]]
+    }
+  }
+}

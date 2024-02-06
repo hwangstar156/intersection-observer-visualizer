@@ -1,0 +1,16 @@
+.DS_Store
+node_modules
+.turbo
+*.log
+.next
+lib
+dist-ssr
+*.local
+.env
+.cache
+server/dist
+public/dist
+storybook-static/
+.npmrc
+.swc
+.vscode

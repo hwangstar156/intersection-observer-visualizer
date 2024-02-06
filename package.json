@@ -1,0 +1,81 @@
+{
+  "name": "intersection-observer-visualizer",
+  "version": "0.0.0",
+  "engines": {
+    "node": ">= 16",
+    "pnpm": ">= 7"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "description": "A tool to visualize how the Intersection Observer API works.",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git@github.interpark.com:tour/int-frontend.git"
+  },
+  "publishConfig": {
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts"
+  },
+  "scripts": {
+    "prepare": "husky install",
+    "build": "pnpm run build:es && pnpm run build:type",
+    "build:es": "swc src -d lib --config-file ./.swcrc",
+    "build:type": "tsc -p tsconfig.json",
+    "ci:version": "changeset version",
+    "ci:release": "changeset publish",
+    "changeset": "changeset",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "snapshot-release": "changeset version --snapshot snapshot && pnpm install && pnpm build && pnpm ci:release --tag snapshot --no-git-tag --snapshot"
+  },
+  "keywords": [],
+  "author": "int-frontend",
+  "license": "MIT",
+  "files": [
+    "lib"
+  ],
+  "lint-staged": {
+    "packages/*/{package.json, CHANGELOG.md}": [
+      "node './scripts/check-snapshot-commit.js'"
+    ]
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.25.2",
+    "@storybook/addon-essentials": "^7.6.12",
+    "@storybook/addon-interactions": "^7.6.12",
+    "@storybook/addon-links": "^7.6.12",
+    "@storybook/addon-viewport": "^7.6.12",
+    "@storybook/blocks": "^7.6.12",
+    "@storybook/nextjs": "^7.6.12",
+    "@storybook/react": "^7.6.12",
+    "@storybook/react-webpack5": "^7.6.12",
+    "@swc/cli": "^0.1.63",
+    "@swc/core": "^1.3.101",
+    "@swc/plugin-styled-components": "^1.5.108",
+    "@types/node": "^20.10.5",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "@types/styled-components": "^5.1.34",
+    "@typescript-eslint/eslint-plugin": "^6.16.0",
+    "@typescript-eslint/parser": "^6.16.0",
+    "babel-loader": "^9.1.3",
+    "babel-plugin-styled-components": "^2.1.4",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "http-proxy-middleware": "^2.0.6",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.1.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "storybook": "^7.6.12",
+    "styled-components": "^6.1.3",
+    "tsconfig-paths-webpack-plugin": "^4.1.0",
+    "typescript": "^5.3.3"
+  }
+}
