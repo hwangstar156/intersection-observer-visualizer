@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { Tabs } from './tabs';
+import { TabWidget } from './tabs/widget';
 
 const Container = styled.div`
   width: 350px;
@@ -14,7 +14,7 @@ const Container = styled.div`
 export function LeftNavigationBar() {
   return (
     <Container>
-      <Tabs />
+      <TabWidget />
     </Container>
   );
 }
