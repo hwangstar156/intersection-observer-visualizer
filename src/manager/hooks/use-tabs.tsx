@@ -1,8 +1,7 @@
-import { useState } from 'react';
-import { DEFAULT_TAB_OPTIONS } from '../constants';
+import { useTabContext } from '../context/tab';
 
 export function useTabs() {
-  const [tabOptions, setTabOptions] = useState(DEFAULT_TAB_OPTIONS);
+  const [tabOptions, setTabOptions] = useTabContext();
 
   const handleClickTabOption = ({ title }: { title: string }) => {
     setTabOptions((prevTabOptions) => {

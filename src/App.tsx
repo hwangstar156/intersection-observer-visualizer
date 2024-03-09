@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { TabProvider } from './manager/context/tab';
 import { LeftNavigationBar } from './manager/left-navigation-bar';
 
 const IframeContainer = styled.div`
@@ -36,7 +37,7 @@ const MainContainer = styled.div`
 
 export function App() {
   return (
-    <>
+    <TabProvider>
       <LeftNavigationBar />
       <MainContainer>
         <IframeContainer>
@@ -48,6 +49,6 @@ export function App() {
           ></Ifame>
         </IframeContainer>
       </MainContainer>
-    </>
+    </TabProvider>
   );
 }
