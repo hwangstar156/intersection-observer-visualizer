@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 import { Tabs } from './tabs';
 
 const Container = styled.div`
-  width: 300px;
+  width: 350px;
   height: 100vh;
   background: ${({ theme }) => theme.colors.black001};
   position: fixed;
