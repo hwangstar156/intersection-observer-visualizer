@@ -13,15 +13,21 @@ const Container = styled.div<{ isActive: boolean }>`
   ${({ isActive, theme }) =>
     isActive &&
     css`
-      border-bottom: 2px solid ${theme.colors.primary};
+      color: ${theme.colors.primary};
+      font-weight: 600;
     `}
 `;
 
 interface TabProps {
-  text: string;
+  title: string;
   isActive: boolean;
+  onClick: ({ title }: { title: string }) => void;
 }
 
-export function Tab({ text, isActive }: TabProps) {
-  return <Container isActive={isActive}>{text}</Container>;
+export function Tab({ title, isActive, onClick }: TabProps) {
+  return (
+    <Container isActive={isActive} onClick={() => onClick({ title })}>
+      {title}
+    </Container>
+  );
 }

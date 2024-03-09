@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import styled from 'styled-components';
+import { ActiveBottomBar } from './active-bottom-bar';
 import { Tab } from './tab';
 
 const DEFAULT_TAB_OPTIONS = [
@@ -19,11 +21,32 @@ const Container = styled.div`
 `;
 
 export function Tabs() {
+  const { handleClickTabOption, tabOptions, activeTabIndex } = useTabs();
+
   return (
-    <Container>
-      {DEFAULT_TAB_OPTIONS.map((option) => (
-        <Tab text={option.title} isActive={option.isActive} />
-      ))}
-    </Container>
+    <>
+      <Container>
+        {tabOptions.map((option) => (
+          <Tab title={option.title} isActive={option.isActive} onClick={handleClickTabOption} />
+        ))}
+      </Container>
+      <ActiveBottomBar activeTabIndex={activeTabIndex} />
+    </>
   );
+}
+
+function useTabs() {
+  const [tabOptions, setTabOptions] = useState(DEFAULT_TAB_OPTIONS);
+
+  const handleClickTabOption = ({ title }: { title: string }) => {
+    setTabOptions((prevTabOptions) => {
+      return prevTabOptions.map((option) =>
+        option.title === title ? { ...option, isActive: true } : { ...option, isActive: false },
+      );
+    });
+  };
+
+  const activeTabIndex = tabOptions.findIndex((option) => option.isActive);
+
+  return { tabOptions, handleClickTabOption, activeTabIndex };
 }
