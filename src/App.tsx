@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { LeftNavigationBar } from './left-navigation-bar/left-navigation-bar';
+import { LeftNavigationBar } from './manager/left-navigation-bar';
 
 const IframeContainer = styled.div`
   padding: 10px;
