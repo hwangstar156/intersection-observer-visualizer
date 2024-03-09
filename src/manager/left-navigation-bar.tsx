@@ -1,4 +1,5 @@
 import { styled } from 'styled-components';
+import { ObserverListWidget } from './observer-list/widget';
 import { TabWidget } from './tabs/widget';
 
 const Container = styled.div`
@@ -15,6 +16,7 @@ export function LeftNavigationBar() {
   return (
     <Container>
       <TabWidget />
+      <ObserverListWidget />
     </Container>
   );
 }
