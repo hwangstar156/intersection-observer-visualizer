@@ -1,4 +1,5 @@
 import { styled } from 'styled-components';
+import { useTabContext } from './context/tab';
 import { ObserverListWidget } from './observer-list/widget';
 import { TabWidget } from './tabs/widget';
 
@@ -13,10 +14,12 @@ const Container = styled.div`
 `;
 
 export function LeftNavigationBar() {
+  const [tabOptions] = useTabContext();
+
   return (
     <Container>
       <TabWidget />
-      <ObserverListWidget />
+      {tabOptions[0].isActive ? <ObserverListWidget /> : null}
     </Container>
   );
 }
