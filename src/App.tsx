@@ -31,7 +31,7 @@ const Ifame = styled.iframe`
 `;
 
 const MainContainer = styled.div`
-  margin-left: 300px;
+  margin-left: 350px;
 `;
 
 export function App() {
