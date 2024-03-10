@@ -5,9 +5,9 @@ import { theme } from '../styles/theme';
 interface RangeInputProps extends InputHTMLAttributes<HTMLInputElement> {
   barColor: string;
   backgroundColor: string;
-  buttonSize?: number;
+  buttonSize: number;
   width?: number;
-  height?: number;
+  height: number;
 }
 
 const StyledRangeInput = styled.input.attrs({ type: 'range' })<
@@ -20,7 +20,7 @@ const StyledRangeInput = styled.input.attrs({ type: 'range' })<
   background: white;
   outline: none;
   border-radius: 6px;
-  height: ${({ height }) => (height ? height : '4px')};
+  height: ${({ height }) => (height ? `${height}px` : '4px')};
   background: ${({ initialPercent, barColor, backgroundColor }) =>
     `linear-gradient(to right, ${barColor} 0%, ${barColor} ${initialPercent}%, ${backgroundColor} ${initialPercent}%, ${backgroundColor} 100%);`};
 
@@ -56,7 +56,7 @@ const Container = styled.div`
 `;
 
 export function RangeInput({ ...args }: RangeInputProps) {
-  const { max, value } = args;
+  const { max, min, value } = args;
 
   const handleRangeInput = (event: FormEvent) => {
     const target = event.target as HTMLInputElement | null;
@@ -65,16 +65,14 @@ export function RangeInput({ ...args }: RangeInputProps) {
       return;
     }
 
-    const gradient_value = 100 / Number(target.max);
+    const percent =
+      ((Number(target.value) - Number(target.min)) / (Number(target.max) - Number(target.min))) *
+      100;
 
-    target.style.background = `linear-gradient(to right, ${theme.colors.primary}, 0%, ${
-      theme.colors.primary
-    } ${gradient_value * Number(target.value)}%, rgb(236, 236, 236) , ${
-      gradient_value * Number(target.value)
-    }%, rgb(236, 236, 236) 100%)`;
+    target.style.background = `linear-gradient(to right, ${theme.colors.primary}, 0%, ${theme.colors.primary} ${percent}%, rgb(236, 236, 236) , ${percent}%, rgb(236, 236, 236) 100%)`;
   };
 
-  const intialPercent = (100 / Number(max)) * Number(value);
+  const intialPercent = ((Number(value) - Number(min)) / (Number(max) - Number(min))) * 100;
 
   return (
     <Container>
