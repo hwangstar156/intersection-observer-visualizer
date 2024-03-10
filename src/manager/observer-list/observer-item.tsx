@@ -5,7 +5,7 @@ const Container = styled.div<{ isActive: boolean }>`
   width: 100%;
   padding-left: 20px;
   color: white;
-  font-size: 18px;
+  font-size: 15px;
   padding: 10px 0 10px 20px;
   cursor: pointer;
   user-select: none;

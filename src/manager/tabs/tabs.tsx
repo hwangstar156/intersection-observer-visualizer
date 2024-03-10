@@ -1,12 +1,11 @@
 import styled from 'styled-components';
 import { DEFAULT_TAB_OPTIONS } from '../constants';
-import { useTabs } from '../hooks/use-tabs';
 import { ActiveBottomBar } from './active-bottom-bar';
 import { Tab } from './tab';
 
 const Container = styled.div`
   width: 100%;
-  height: 70px;
+  height: 50px;
   display: flex;
 `;
 
