@@ -19,8 +19,13 @@ export function Tabs({ activeTabIndex, handleClickTabOption, tabOptions }: TabsP
   return (
     <>
       <Container>
-        {tabOptions.map((option) => (
-          <Tab title={option.title} isActive={option.isActive} onClick={handleClickTabOption} />
+        {tabOptions.map((option, idx) => (
+          <Tab
+            title={option.title}
+            isActive={option.isActive}
+            key={idx}
+            onClick={handleClickTabOption}
+          />
         ))}
       </Container>
       <ActiveBottomBar activeTabIndex={activeTabIndex} />
