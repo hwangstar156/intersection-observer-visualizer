@@ -1,10 +1,12 @@
 import { styled } from 'styled-components';
+import { RangeInput } from '../common/range-input';
+import { theme } from '../styles/theme';
 import { useTabContext } from './context/tab';
 import { ObserverListWidget } from './observer-list/widget';
 import { TabWidget } from './tabs/widget';
 
 const Container = styled.div`
-  width: 350px;
+  width: 250px;
   height: 100vh;
   background: ${({ theme }) => theme.colors.black001};
   position: fixed;
@@ -19,7 +21,18 @@ export function LeftNavigationBar() {
   return (
     <Container>
       <TabWidget />
-      {tabOptions[0].isActive ? <ObserverListWidget /> : null}
+      {tabOptions[0].isActive ? (
+        <ObserverListWidget />
+      ) : (
+        <RangeInput
+          min={0}
+          max={100}
+          step={1}
+          value={50}
+          backgroundColor={'#fff'}
+          barColor={theme.colors.primary}
+        />
+      )}
     </Container>
   );
 }
