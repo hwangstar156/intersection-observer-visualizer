@@ -17,8 +17,8 @@ interface ObserverListProps {
 export function ObserverList({ items }: ObserverListProps) {
   return (
     <Container>
-      {items.map((item) => (
-        <ObserverItem {...item} />
+      {items.map((item, idx) => (
+        <ObserverItem {...item} key={idx} />
       ))}
     </Container>
   );
