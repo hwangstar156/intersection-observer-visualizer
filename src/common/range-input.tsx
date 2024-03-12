@@ -51,8 +51,6 @@ const StyledRangeInput = styled.input.attrs({ type: 'range' })<
 const Container = styled.div`
   position: relative;
   width: 100%;
-  margin-top: 2.4rem;
-  padding: 0 1.2rem;
 `;
 
 export function RangeInput({ ...args }: RangeInputProps) {

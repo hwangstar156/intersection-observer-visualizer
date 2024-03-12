@@ -23,18 +23,16 @@ const StyledInput = styled.input<RangeInputProps>`
   }
 `;
 
-const Container = styled.div<Pick<RangeInputProps, 'suffix'>>`
+const Container = styled.div<Pick<RangeInputProps, 'suffix' | 'height'>>`
   position: relative;
   display: inline-block;
-  width: 100%;
-  margin-top: 2.4rem;
-  padding: 0 1.2rem;
   font-size: 14px;
 
   &::after {
     overflow: hidden;
-    position: relative;
-    right: 1.2rem;
+    position: absolute;
+    top: ${({ height }) => `${(height - 21) / 2}px`};
+    right: 0.5rem;
     transition: all 0.05s ease-in-out;
     content: '${({ suffix }) => (suffix ? suffix : '')}';
   }
@@ -42,10 +40,9 @@ const Container = styled.div<Pick<RangeInputProps, 'suffix'>>`
 
 export function CommonInput({ ...args }: RangeInputProps) {
   // TODO: 예외처리 추가
-  const { suffix } = args;
 
   return (
-    <Container suffix={suffix}>
+    <Container {...args}>
       <StyledInput {...args} />
     </Container>
   );
