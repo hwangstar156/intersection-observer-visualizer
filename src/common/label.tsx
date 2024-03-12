@@ -3,13 +3,11 @@ import styled from 'styled-components';
 
 const StyledLabel = styled.label<{ fontSize: number }>`
   font-size: 14px;
-  color: white;
+  color: #cdcdcd;
   font-size: ${({ fontSize }) => `${fontSize}px`};
 `;
 
 interface LabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
-  width?: number;
-  height: number;
   fontSize: number;
 }
 
