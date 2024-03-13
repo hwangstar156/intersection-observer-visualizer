@@ -1,10 +1,11 @@
 import { InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
+import { SELECT_UNIT_LIST } from '../manager/observer-option-form/constants';
 
 interface RangeInputProps extends InputHTMLAttributes<HTMLInputElement> {
   width?: number;
   height: number;
-  suffix?: string;
+  suffix?: (typeof SELECT_UNIT_LIST)[number];
 }
 
 const StyledInput = styled.input<RangeInputProps>`
