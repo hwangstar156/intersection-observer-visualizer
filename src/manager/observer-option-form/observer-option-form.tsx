@@ -1,7 +1,8 @@
+import { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 import { CommonInput } from '../../common/common-input';
 import { Label } from '../../common/label';
-import { useInput } from './hook';
+import { useInput, useSelectValue } from './hook';
 import { Input } from './input';
 import { Select } from './select';
 
@@ -23,6 +24,7 @@ interface ObserverOptionFormProps {
 
 export function ObserverOptionForm({ initialValue }: ObserverOptionFormProps) {
   const { handleChangeRangeInput, input } = useInput({ initialValue });
+  const { currentUnit, handleChangeUnit } = useSelectValue();
 
   return (
     <Container>
@@ -33,11 +35,11 @@ export function ObserverOptionForm({ initialValue }: ObserverOptionFormProps) {
           width={70}
           height={30}
           type="number"
-          suffix="px"
+          suffix={currentUnit}
           value={input}
           onChange={handleChangeRangeInput}
         />
-        <Select height={30} width={100} />
+        <Select height={30} width={100} currentValue={currentUnit} onChange={handleChangeUnit} />
       </InputWrapper>
     </Container>
   );
