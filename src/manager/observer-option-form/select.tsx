@@ -1,7 +1,7 @@
-import { SelectHTMLAttributes } from 'react';
+import { ChangeEvent, SelectHTMLAttributes } from 'react';
 import styled from 'styled-components';
 
-const StyledSelect = styled.select<SelectProps>`
+const StyledSelect = styled.select<Omit<SelectProps, 'onChange' | 'currentValue'>>`
   background-color: #666;
   color: white;
   padding: 5px;
@@ -20,11 +20,13 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   width?: number;
   height: number;
   suffix?: string;
+  onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
+  currentValue: '%' | 'px';
 }
 
-export function Select({ ...args }: SelectProps) {
+export function Select({ currentValue, onChange, ...args }: SelectProps) {
   return (
-    <StyledSelect name="optionUnit" {...args}>
+    <StyledSelect name="optionUnit" onChange={onChange} {...args} value={currentValue}>
       <option value="%">as percent</option>
       <option value="px">as pixel</option>
     </StyledSelect>
