@@ -1,6 +1,7 @@
 import { InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
 import { SELECT_UNIT_LIST } from '../manager/observer-option-form/constants';
+import { CssLengthUnit } from '../manager/observer-option-form/css-length-unit';
 
 interface RangeInputProps extends InputHTMLAttributes<HTMLInputElement> {
   width?: number;
@@ -9,42 +10,47 @@ interface RangeInputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const StyledInput = styled.input<RangeInputProps>`
-  width: ${({ width }) => (width ? `${width}px` : '100%')};
-  background: white;
   outline: none;
-  border-radius: 6px;
-  height: ${({ height }) => (height ? `${height}px` : '10px')};
   padding-left: 5px;
   border: 1px solid transparent;
-
-  box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.4);
+  background: transparent;
+  height: ${({ height }) => (height ? `${height}px` : '10px')};
+  width: ${({ width }) => (width ? `${width - 45}px` : '100%')};
+  vertical-align: center;
 
   :focus {
     outline: none;
   }
 `;
 
-const Container = styled.div<Pick<RangeInputProps, 'suffix' | 'height'>>`
+const Container = styled.div<Pick<RangeInputProps, 'suffix' | 'height' | 'width'>>`
   position: relative;
-  display: inline-block;
-  font-size: 14px;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  border-radius: 6px;
+  background: white;
+  height: ${({ height }) => (height ? `${height}px` : '10px')};
+  width: ${({ width }) => (width ? `${width}px` : '100%')};
+  box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.4);
 
-  &::after {
+  /* &::after {
     overflow: hidden;
     position: absolute;
     top: ${({ height }) => `${(height - 21) / 2}px`};
     right: 0.5rem;
     transition: all 0.05s ease-in-out;
     content: '${({ suffix }) => (suffix ? suffix : '')}';
-  }
+  } */
 `;
 
-export function CommonInput({ ...args }: RangeInputProps) {
+export function CommonInput({ children, ...args }: RangeInputProps) {
   // TODO: 예외처리 추가
 
   return (
     <Container {...args}>
       <StyledInput {...args} />
+      {children}
     </Container>
   );
 }
