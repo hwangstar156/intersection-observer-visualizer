@@ -25,14 +25,22 @@ interface ObserverOptionFormProps {
 }
 
 export function ObserverOptionForm({ initialValue }: ObserverOptionFormProps) {
-  const { handleChangeRangeInput, input } = useInput({ initialValue });
+  const { handleChangeRangeInput, input, resetInput } = useInput({ initialValue });
   const { currentUnit, handleChangeUnit } = useSelectValue();
-  const { currentNumbericUnit, handleChangeNumericUnit } = useNumericUnitSelectValue();
+  const { currentNumbericUnit, handleChangeNumericUnit } = useNumericUnitSelectValue({
+    resetInput,
+  });
 
   return (
     <Container>
       <Label fontSize={15}>top</Label>
-      <Input min={-9999} max={9999} step={1} value={input} onChange={handleChangeRangeInput} />
+      <Input
+        min={-(currentNumbericUnit - 1)}
+        max={currentNumbericUnit - 1}
+        step={1}
+        value={input}
+        onChange={handleChangeRangeInput}
+      />
       <InputWrapper>
         <CommonInput
           width={90}
