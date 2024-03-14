@@ -1,5 +1,5 @@
 import { useState, ChangeEvent } from 'react';
-import { SELECT_UNIT_LIST } from './constants';
+import { NUMERIC_UNIT_LIST, SELECT_UNIT_LIST } from './constants';
 
 export function useInput({ initialValue }: { initialValue: number }) {
   const [input, setInput] = useState(initialValue);
@@ -13,12 +13,12 @@ export function useInput({ initialValue }: { initialValue: number }) {
   return { input, handleChangeRangeInput };
 }
 
-const isUnitValue = (value: string): value is (typeof SELECT_UNIT_LIST)[number] => {
-  return SELECT_UNIT_LIST.some((unit) => unit === value);
-};
-
 export function useSelectValue() {
   const [currentUnit, setCurrentUnit] = useState<(typeof SELECT_UNIT_LIST)[number]>('px');
+
+  const isUnitValue = (value: string): value is (typeof SELECT_UNIT_LIST)[number] => {
+    return SELECT_UNIT_LIST.some((unit) => unit === value);
+  };
 
   const handleChangeUnit = (e: ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
@@ -29,4 +29,23 @@ export function useSelectValue() {
   };
 
   return { currentUnit, handleChangeUnit };
+}
+
+export function useNumericUnitSelectValue() {
+  const [currentNumbericUnit, setCurrentNumbericUnit] =
+    useState<(typeof NUMERIC_UNIT_LIST)[number]>(10);
+
+  const isUnitValue = (value: number): value is (typeof NUMERIC_UNIT_LIST)[number] => {
+    return NUMERIC_UNIT_LIST.some((unit) => unit === value);
+  };
+
+  const handleChangeNumericUnit = (e: ChangeEvent<HTMLSelectElement>) => {
+    const value = Number(e.target.value);
+
+    if (isUnitValue(value)) {
+      setCurrentNumbericUnit(value);
+    }
+  };
+
+  return { currentNumbericUnit, handleChangeNumericUnit };
 }
