@@ -10,7 +10,11 @@ export function useInput({ initialValue }: { initialValue: number }) {
     setInput(value);
   };
 
-  return { input, handleChangeRangeInput };
+  const resetInput = () => {
+    setInput(0);
+  };
+
+  return { input, handleChangeRangeInput, resetInput };
 }
 
 export function useSelectValue() {
@@ -31,7 +35,11 @@ export function useSelectValue() {
   return { currentUnit, handleChangeUnit };
 }
 
-export function useNumericUnitSelectValue() {
+interface UseNumericUnitSelectValueProps {
+  resetInput: () => void;
+}
+
+export function useNumericUnitSelectValue({ resetInput }: UseNumericUnitSelectValueProps) {
   const [currentNumbericUnit, setCurrentNumbericUnit] =
     useState<(typeof NUMERIC_UNIT_LIST)[number]>(10);
 
@@ -44,6 +52,8 @@ export function useNumericUnitSelectValue() {
 
     if (isUnitValue(value)) {
       setCurrentNumbericUnit(value);
+
+      resetInput();
     }
   };
 
