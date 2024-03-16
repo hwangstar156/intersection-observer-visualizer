@@ -28,6 +28,11 @@ export function useInput({ initialValue }: { initialValue: number }) {
     const value = event.target.value;
     const limitValue = currentNumbericUnit;
 
+    if (!value) {
+      setInput(0);
+      return;
+    }
+
     if (limitValue > Number(value)) {
       setInput(parseInt(value, 10));
     }
