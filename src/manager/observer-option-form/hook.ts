@@ -58,3 +58,18 @@ export function useSelectValue() {
 
   return { currentUnit, handleChangeUnit };
 }
+
+export function useThresholdInput({ initialValue }: { initialValue: number }) {
+  const [input, setInput] = useState(initialValue);
+
+  const handleChangeRangeInput = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+
+    setInput(value);
+  };
+
+  return {
+    input,
+    handleChangeRangeInput,
+  };
+}
