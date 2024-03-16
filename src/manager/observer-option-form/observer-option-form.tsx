@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { CommonInput } from '../../common/common-input';
 import { Label } from '../../common/label';
 import { CssLengthUnit } from './css-length-unit';
-import { useInput, useNumericUnitSelectValue, useSelectValue } from './hook';
+import { useInput, useSelectValue } from './hook';
 import { Input } from './input';
 import { NumericUnitSelect } from './numeric-unit-select';
 
@@ -25,11 +25,10 @@ interface ObserverOptionFormProps {
 }
 
 export function ObserverOptionForm({ initialValue }: ObserverOptionFormProps) {
-  const { handleChangeRangeInput, input, resetInput } = useInput({ initialValue });
-  const { currentUnit, handleChangeUnit } = useSelectValue();
-  const { currentNumbericUnit, handleChangeNumericUnit } = useNumericUnitSelectValue({
-    resetInput,
+  const { handleChangeRangeInput, input, currentNumbericUnit, handleChangeNumericUnit } = useInput({
+    initialValue,
   });
+  const { currentUnit, handleChangeUnit } = useSelectValue();
 
   return (
     <Container>
@@ -45,7 +44,7 @@ export function ObserverOptionForm({ initialValue }: ObserverOptionFormProps) {
         <CommonInput
           width={90}
           height={30}
-          type="number"
+          type="text"
           suffix={currentUnit}
           value={input}
           onChange={handleChangeRangeInput}

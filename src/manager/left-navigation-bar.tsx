@@ -1,8 +1,7 @@
 import { styled } from 'styled-components';
-import { RangeInput } from '../common/range-input';
-import { theme } from '../styles/theme';
 import { useTabContext } from './context/tab';
 import { ObserverListWidget } from './observer-list/widget';
+import { ObserverOptionForm } from './observer-option-form/observer-option-form';
 import { TabWidget } from './tabs/widget';
 
 const Container = styled.div`
@@ -24,14 +23,9 @@ export function LeftNavigationBar() {
       {tabOptions[0].isActive ? (
         <ObserverListWidget />
       ) : (
-        <RangeInput
-          min={0}
-          max={100}
-          step={1}
-          value={50}
-          backgroundColor={'#fff'}
-          barColor={theme.colors.primary}
-        />
+        <>
+          <ObserverOptionForm initialValue={0} />
+        </>
       )}
     </Container>
   );
