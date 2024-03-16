@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { CommonInput } from '../../common/common-input';
 import { Label } from '../../common/label';
 import { CssLengthUnit } from './css-length-unit';
-import { useInput, useSelectValue } from './hook';
+import { useInput, useSelectValue, useThresholdInput } from './hook';
 import { Input } from './input';
 import { NumericUnitSelect } from './numeric-unit-select';
 
@@ -22,9 +22,10 @@ const InputWrapper = styled.div`
 
 interface ObserverOptionFormProps {
   initialValue: number;
+  label: string;
 }
 
-export function ObserverOptionForm({ initialValue }: ObserverOptionFormProps) {
+export function ObserverOptionForm({ label, initialValue }: ObserverOptionFormProps) {
   const { handleChangeRangeInput, input, currentNumbericUnit, handleChangeNumericUnit } = useInput({
     initialValue,
   });
@@ -32,7 +33,7 @@ export function ObserverOptionForm({ initialValue }: ObserverOptionFormProps) {
 
   return (
     <Container>
-      <Label fontSize={15}>top</Label>
+      <Label fontSize={15}>{label}</Label>
       <Input
         min={-(currentNumbericUnit - 1)}
         max={currentNumbericUnit - 1}
@@ -45,8 +46,8 @@ export function ObserverOptionForm({ initialValue }: ObserverOptionFormProps) {
           width={90}
           height={30}
           type="text"
-          suffix={currentUnit}
           value={input}
+          hasSuffixInput={true}
           onChange={handleChangeRangeInput}
         >
           <CssLengthUnit
@@ -62,6 +63,30 @@ export function ObserverOptionForm({ initialValue }: ObserverOptionFormProps) {
           currentValue={currentNumbericUnit}
           onChange={handleChangeNumericUnit}
         />
+      </InputWrapper>
+    </Container>
+  );
+}
+
+export function ThresholdOptionForm({ label, initialValue }: ObserverOptionFormProps) {
+  const { handleChangeRangeInput, input } = useThresholdInput({
+    initialValue,
+  });
+
+  return (
+    <Container>
+      <Label fontSize={15}>{label}</Label>
+      <Input min={0} max={1} step={0.1} value={input} onChange={handleChangeRangeInput} />
+      <InputWrapper>
+        <CommonInput
+          width={35}
+          height={30}
+          type="text"
+          value={input}
+          disabled
+          hasSuffixInput={false}
+          onChange={handleChangeRangeInput}
+        ></CommonInput>
       </InputWrapper>
     </Container>
   );
