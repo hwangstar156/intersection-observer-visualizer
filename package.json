@@ -78,6 +78,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "formik": "^2.4.5",
     "vite": "^5.1.4"
   }
 }
