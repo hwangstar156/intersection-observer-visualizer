@@ -30,7 +30,7 @@ const StyledRangeInput = styled.input.attrs({ type: 'range' })<
     cursor: pointer;
     height: ${({ buttonSize }) => `${buttonSize}px`};
     width: ${({ buttonSize }) => `${buttonSize}px`};
-    margin-top: -8px;
+    margin-top: -7px;
     box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 1);
 
     border-radius: 50%;
@@ -74,7 +74,7 @@ export function RangeInput({ ...args }: RangeInputProps) {
 
   return (
     <Container>
-      <StyledRangeInput onInput={handleRangeInput} {...args} initialPercent={intialPercent} />
+      <StyledRangeInput onChange={handleRangeInput} {...args} initialPercent={intialPercent} />
     </Container>
   );
 }
