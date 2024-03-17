@@ -17,6 +17,7 @@ const StyledButton = styled.button<ButtonProps>`
   cursor: pointer;
   background-color: ${({ backgroundColor }) => backgroundColor};
   border-color: transparent;
+  color: ${({ color }) => (color ? color : '#fff')};
 
   &:hover {
     filter: brightness(1.05);
@@ -27,9 +28,8 @@ const Container = styled.div`
   position: relative;
   display: inline-block;
   width: 100%;
-  margin-top: 2.4rem;
-  padding: 0 1.2rem;
-  font-size: 14px;
+  font-size: 15px;
+  color: string;
 `;
 
 export function Button({ children, ...args }: ButtonProps) {

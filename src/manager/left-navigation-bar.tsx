@@ -1,10 +1,9 @@
 import { styled } from 'styled-components';
 import { useTabContext } from './context/tab';
 import { ObserverListWidget } from './observer-list/widget';
-import {
-  ObserverOptionForm,
-  ThresholdOptionForm,
-} from './observer-option-form/observer-option-form';
+import { ObserverRootOptionButton } from './observer-option-form/observer-root-option-button';
+import { RootMarginForm } from './observer-option-form/root-margin-form';
+import { ThresholdForm } from './observer-option-form/threshold-form';
 import { TabWidget } from './tabs/widget';
 
 const Container = styled.div`
@@ -17,11 +16,10 @@ const Container = styled.div`
   bottom: 0;
 `;
 
-const FormContainer = styled.div`
+const OptionFormContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 450px;
-  justify-content: space-between;
+  padding: 0 1.3rem;
 `;
 
 export function LeftNavigationBar() {
@@ -34,13 +32,11 @@ export function LeftNavigationBar() {
         <ObserverListWidget />
       ) : (
         <>
-          <FormContainer>
-            <ObserverOptionForm initialValue={0} label="top" />
-            <ObserverOptionForm initialValue={0} label="left" />
-            <ObserverOptionForm initialValue={0} label="right" />
-            <ObserverOptionForm initialValue={0} label="bottom" />
-          </FormContainer>
-          <ThresholdOptionForm initialValue={0} label="threshold" />
+          <OptionFormContainer>
+            <ObserverRootOptionButton />
+            <RootMarginForm />
+            <ThresholdForm />
+          </OptionFormContainer>
         </>
       )}
     </Container>
