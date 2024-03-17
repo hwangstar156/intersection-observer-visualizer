@@ -5,7 +5,7 @@ import { ThresholdInput } from './input';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 15px;
 `;
 
 export function ThresholdForm() {
