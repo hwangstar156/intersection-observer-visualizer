@@ -1,7 +1,7 @@
 import { useState, ChangeEvent } from 'react';
 import { NUMERIC_UNIT_LIST, SELECT_UNIT_LIST } from './constants';
 
-export function useInput({ initialValue }: { initialValue: number }) {
+export function useRootMarginInput({ initialValue }: { initialValue: number }) {
   const [input, setInput] = useState(initialValue);
   const [currentNumbericUnit, setCurrentNumbericUnit] =
     useState<(typeof NUMERIC_UNIT_LIST)[number]>(10);
