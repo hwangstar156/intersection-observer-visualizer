@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { TabProvider } from './manager/context/tab';
+import { ToggleProvider } from './manager/context/toggle';
 import { LeftNavigationBar } from './manager/left-navigation-bar';
 
 const IframeContainer = styled.div`
@@ -37,18 +38,20 @@ const MainContainer = styled.div`
 
 export function App() {
   return (
-    <TabProvider>
-      <LeftNavigationBar />
-      <MainContainer>
-        <IframeContainer>
-          <Ifame
-            src="http://localhost:3004/rentacar"
-            width={1000}
-            height={800}
-            allowFullScreen
-          ></Ifame>
-        </IframeContainer>
-      </MainContainer>
-    </TabProvider>
+    <ToggleProvider>
+      <TabProvider>
+        <LeftNavigationBar />
+        <MainContainer>
+          <IframeContainer>
+            <Ifame
+              src="http://localhost:3004/rentacar"
+              width={1000}
+              height={800}
+              allowFullScreen
+            ></Ifame>
+          </IframeContainer>
+        </MainContainer>
+      </TabProvider>
+    </ToggleProvider>
   );
 }
