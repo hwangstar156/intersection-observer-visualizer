@@ -16,12 +16,12 @@ const Container = styled.div<{ isOpen: boolean }>`
   left: 0;
   top: 0;
   bottom: 0;
-  transition: 0.4s;
+  transition: 0.3s;
 
   ${({ isOpen }) =>
     !isOpen &&
     css`
-      transform: translate(-200px);
+      transform: translate(-195px);
     `}
 `;
 
