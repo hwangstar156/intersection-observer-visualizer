@@ -41,8 +41,9 @@ const Container = styled.div<Pick<RangeInputProps, 'height' | 'width'>>`
   box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.4);
 
   :disabled {
-    background-color: ${({ theme }) => theme.colors.primary};
+    background-color: #657786;
     opacity: 0.7;
+    color: white;
   }
 `;
 

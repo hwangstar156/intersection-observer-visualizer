@@ -74,7 +74,7 @@ export function ThresholdOptionForm({ label, initialValue }: ObserverOptionFormP
   });
 
   return (
-    <Container>
+    <Container style={{ marginTop: '50px' }}>
       <Label fontSize={15}>{label}</Label>
       <Input min={0} max={1} step={0.1} value={input} onChange={handleChangeRangeInput} />
       <InputWrapper>

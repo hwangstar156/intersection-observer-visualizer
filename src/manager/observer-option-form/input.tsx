@@ -20,7 +20,7 @@ export function Input({ max, min, step, onChange, value }: InputProps) {
       backgroundColor={'#fff'}
       barColor={theme.colors.primary}
       buttonSize={20}
-      height={4}
+      height={5}
       onChange={onChange}
     />
   );
