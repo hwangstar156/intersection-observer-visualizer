@@ -1,7 +1,10 @@
+import { useFormikContext } from 'formik';
+import { ChangeEvent } from 'react';
 import styled from 'styled-components';
 import { CommonInput } from '../../common/common-input';
+import { FormikValue } from '../left-navigation-bar';
 import { CssLengthUnit } from './css-length-unit';
-import { useRootMarginInput, useSelectValue, useThresholdInput } from './hook';
+import { useRootMarginInput, useSelectValue } from './hook';
 import { NumericUnitSelect } from './numeric-unit-select';
 import { Range } from './range';
 
@@ -12,28 +15,39 @@ const InputWrapper = styled.div`
 `;
 
 interface InputProps {
-  initialValue: number;
   width: number;
   height: number;
+  name: keyof FormikValue;
 }
 
-export function ThresholdInput({ initialValue, width, height }: InputProps) {
-  const { handleChangeRangeInput, input } = useThresholdInput({
-    initialValue,
-  });
+export function ThresholdInput({ width, height, name }: InputProps) {
+  const { values, setFieldValue } = useFormikContext<FormikValue>();
+
+  const handleChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setFieldValue(name, { ...values[name], value: event.target.valueAsNumber });
+  };
 
   return (
     <>
-      <Range min={0} max={1} step={0.1} value={input} onChange={handleChangeRangeInput} />
+      <Range
+        min={0}
+        max={1}
+        step={0.1}
+        value={values['threshold']['value']}
+        onChange={handleChangeInput}
+        name={name}
+      />
       <InputWrapper>
         <CommonInput
+          id={name}
           width={width}
           height={height}
           type="text"
-          value={input}
+          value={values['threshold']['value']}
           disabled
           hasSuffixInput={false}
-          onChange={handleChangeRangeInput}
+          name={name}
+          onChange={handleChangeInput}
         ></CommonInput>
       </InputWrapper>
     </>
@@ -42,12 +56,12 @@ export function ThresholdInput({ initialValue, width, height }: InputProps) {
 
 interface InputWithUnitProps extends InputProps {}
 
-export function RootMarginInput({ initialValue, width, height }: InputWithUnitProps) {
-  const { handleChangeRangeInput, input, currentNumbericUnit, handleChangeNumericUnit } =
+export function RootMarginInput({ width, height, name }: InputWithUnitProps) {
+  const { handleChangeRangeInput, values, currentNumbericUnit, handleChangeNumericUnit } =
     useRootMarginInput({
-      initialValue,
+      name,
     });
-  const { currentUnit, handleChangeUnit } = useSelectValue();
+  const { selectValue, handleChangeUnit } = useSelectValue({ name });
 
   return (
     <>
@@ -55,20 +69,24 @@ export function RootMarginInput({ initialValue, width, height }: InputWithUnitPr
         min={-(currentNumbericUnit - 1)}
         max={currentNumbericUnit - 1}
         step={1}
-        value={input}
+        value={values[name]['value']}
+        name={name}
         onChange={handleChangeRangeInput}
       />
       <InputWrapper>
         <CommonInput
+          id={name}
           width={width}
           height={height}
           type="text"
-          value={input}
+          value={values[name]['value']}
+          name={name}
           hasSuffixInput={true}
           onChange={handleChangeRangeInput}
         >
           <CssLengthUnit
-            currentValue={currentUnit}
+            name={name}
+            currentValue={selectValue[name]['cssLengthUnit']}
             onChange={handleChangeUnit}
             width={37}
             height={20}

@@ -15,7 +15,7 @@ export function ThresholdForm() {
       <Label fontSize={20} color={'#fff'}>
         threshold
       </Label>
-      <ThresholdInput height={30} width={35} initialValue={0} />
+      <ThresholdInput height={30} width={35} name="threshold" />
     </Container>
   );
 }

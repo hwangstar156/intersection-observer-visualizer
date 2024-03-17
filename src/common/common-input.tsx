@@ -1,6 +1,6 @@
+import { Field } from 'formik';
 import { InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
-import { SELECT_UNIT_LIST } from '../manager/observer-option-form/constants';
 
 interface RangeInputProps extends InputHTMLAttributes<HTMLInputElement> {
   width?: number;
@@ -50,10 +50,18 @@ const Container = styled.div<Pick<RangeInputProps, 'height' | 'width'>>`
 export function CommonInput({ children, ...args }: RangeInputProps) {
   // TODO: 예외처리 추가
 
+  const { name } = args;
+
   return (
-    <Container {...args}>
-      <StyledInput {...args} />
-      {children}
-    </Container>
+    <Field name={name}>
+      {() => {
+        return (
+          <Container {...args}>
+            <StyledInput {...args} />
+            {children}
+          </Container>
+        );
+      }}
+    </Field>
   );
 }

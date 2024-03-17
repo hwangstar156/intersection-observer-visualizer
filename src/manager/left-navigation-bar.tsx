@@ -8,6 +8,8 @@ import { ObserverRootOptionButton } from './observer-option-form/observer-root-o
 import { RootMarginForm } from './observer-option-form/root-margin-form';
 import { ThresholdForm } from './observer-option-form/threshold-form';
 import { TabWidget } from './tabs/widget';
+import { Formik, FormikHelpers, FormikProvider, useFormik } from 'formik';
+import { SELECT_UNIT_LIST } from './observer-option-form/constants';
 
 const Container = styled.div<{ isOpen: boolean }>`
   width: 250px;
@@ -26,16 +28,58 @@ const Container = styled.div<{ isOpen: boolean }>`
     `}
 `;
 
-const OptionFormContainer = styled.div`
+const OptionFormContainer = styled.form`
   display: flex;
   flex-direction: column;
   padding: 0 1.3rem;
   margin-top: 30px;
 `;
 
+interface ValueFormat {
+  value: number;
+  cssLengthUnit: (typeof SELECT_UNIT_LIST)[number];
+}
+
+export interface FormikValue {
+  top: ValueFormat;
+  left: ValueFormat;
+  right: ValueFormat;
+  bottom: ValueFormat;
+  threshold: ValueFormat;
+}
+
+const initialValues = {
+  top: {
+    value: 0,
+    cssLengthUnit: 'px',
+  },
+  left: {
+    value: 0,
+    cssLengthUnit: 'px',
+  },
+  right: {
+    value: 0,
+    cssLengthUnit: 'px',
+  },
+  bottom: {
+    value: 0,
+    cssLengthUnit: 'px',
+  },
+  threshold: {
+    value: 0,
+  },
+};
+
 export function LeftNavigationBar() {
   const [tabOptions] = useTabContext();
   const [isOpen] = useToggleContext();
+
+  const formikObject = useFormik({
+    initialValues,
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
 
   return (
     <Container isOpen={isOpen}>
@@ -46,12 +90,14 @@ export function LeftNavigationBar() {
           {tabOptions[0].isActive ? (
             <ObserverListWidget />
           ) : (
-            <OptionFormContainer>
-              <ObserverRootOptionButton />
-              <RootMarginForm />
-              <ThresholdForm />
-              <ApplyButton />
-            </OptionFormContainer>
+            <FormikProvider value={formikObject}>
+              <OptionFormContainer onSubmit={formikObject.handleSubmit}>
+                <ObserverRootOptionButton />
+                <RootMarginForm />
+                <ThresholdForm />
+                <ApplyButton />
+              </OptionFormContainer>
+            </FormikProvider>
           )}
         </>
       ) : null}
