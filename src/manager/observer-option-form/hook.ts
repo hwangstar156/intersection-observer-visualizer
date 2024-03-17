@@ -1,17 +1,19 @@
+import { useFormikContext } from 'formik';
 import { useState, ChangeEvent } from 'react';
+import { FormikValue } from '../left-navigation-bar';
 import { NUMERIC_UNIT_LIST, SELECT_UNIT_LIST } from './constants';
 
-export function useRootMarginInput({ initialValue }: { initialValue: number }) {
-  const [input, setInput] = useState(initialValue);
+export function useRootMarginInput({ name }: { name: keyof FormikValue }) {
   const [currentNumbericUnit, setCurrentNumbericUnit] =
     useState<(typeof NUMERIC_UNIT_LIST)[number]>(10);
+  const { values, setFieldValue } = useFormikContext<FormikValue>();
 
   const isUnitValue = (value: number): value is (typeof NUMERIC_UNIT_LIST)[number] => {
     return NUMERIC_UNIT_LIST.some((unit) => unit === value);
   };
 
   const resetInput = () => {
-    setInput(0);
+    setFieldValue(name, { ...values[name], value: 0 });
   };
 
   const handleChangeNumericUnit = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -29,25 +31,25 @@ export function useRootMarginInput({ initialValue }: { initialValue: number }) {
     const limitValue = currentNumbericUnit;
 
     if (!value) {
-      setInput(0);
+      setFieldValue(name, { ...values[name], value: 0 });
       return;
     }
 
     if (limitValue > Number(value)) {
-      setInput(parseInt(value, 10));
+      setFieldValue(name, { ...values[name], value: parseInt(value, 10) });
     }
   };
 
   return {
-    input,
+    values,
     handleChangeRangeInput,
     handleChangeNumericUnit,
     currentNumbericUnit,
   };
 }
 
-export function useSelectValue() {
-  const [currentUnit, setCurrentUnit] = useState<(typeof SELECT_UNIT_LIST)[number]>('px');
+export function useSelectValue({ name }: { name: keyof FormikValue }) {
+  const { values, setFieldValue } = useFormikContext<FormikValue>();
 
   const isUnitValue = (value: string): value is (typeof SELECT_UNIT_LIST)[number] => {
     return SELECT_UNIT_LIST.some((unit) => unit === value);
@@ -57,24 +59,9 @@ export function useSelectValue() {
     const value = e.target.value;
 
     if (isUnitValue(value)) {
-      setCurrentUnit(value);
+      setFieldValue(name, { ...values[name], cssLengthUnit: value });
     }
   };
 
-  return { currentUnit, handleChangeUnit };
-}
-
-export function useThresholdInput({ initialValue }: { initialValue: number }) {
-  const [input, setInput] = useState(initialValue);
-
-  const handleChangeRangeInput = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.valueAsNumber;
-
-    setInput(value);
-  };
-
-  return {
-    input,
-    handleChangeRangeInput,
-  };
+  return { selectValue: values, handleChangeUnit };
 }

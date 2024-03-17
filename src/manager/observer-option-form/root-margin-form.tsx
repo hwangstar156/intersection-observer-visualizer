@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Label } from '../../common/label';
+import { FormikValue } from '../left-navigation-bar';
 import { RootMarginInput } from './input';
 
 const RootMarginContainer = styled.div`
@@ -16,7 +17,7 @@ const Container = styled.div`
   gap: 9px;
 `;
 
-const ROOT_MARGIN_OPTIONS = ['top', 'right', 'bottom', 'left'];
+const ROOT_MARGIN_OPTIONS = ['top', 'right', 'bottom', 'left'] as const;
 
 export function RootMarginForm() {
   return (
@@ -25,17 +26,17 @@ export function RootMarginForm() {
         rootMargin
       </Label>
       {ROOT_MARGIN_OPTIONS.map((option) => (
-        <RootMarginSubForm label={option} />
+        <RootMarginSubForm label={option} name={option} />
       ))}
     </RootMarginContainer>
   );
 }
 
-export function RootMarginSubForm({ label }: { label: string }) {
+export function RootMarginSubForm({ label, name }: { label: string; name: keyof FormikValue }) {
   return (
     <Container>
       <Label fontSize={15}>{label}</Label>
-      <RootMarginInput height={30} width={90} initialValue={0} />
+      <RootMarginInput height={30} width={90} name={name} />
     </Container>
   );
 }
