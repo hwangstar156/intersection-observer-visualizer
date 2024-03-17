@@ -3,6 +3,7 @@ import { useTabContext } from './context/tab';
 import { useToggleContext } from './context/toggle';
 import { NavigationBarHeader } from './navigation-bar-header/navigation-bar-header';
 import { ObserverListWidget } from './observer-list/widget';
+import { ApplyButton } from './observer-option-form/apply-button';
 import { ObserverRootOptionButton } from './observer-option-form/observer-root-option-button';
 import { RootMarginForm } from './observer-option-form/root-margin-form';
 import { ThresholdForm } from './observer-option-form/threshold-form';
@@ -49,6 +50,7 @@ export function LeftNavigationBar() {
               <ObserverRootOptionButton />
               <RootMarginForm />
               <ThresholdForm />
+              <ApplyButton />
             </OptionFormContainer>
           )}
         </>
