@@ -6,6 +6,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
+  margin-bottom: 80px;
 `;
 
 export function ThresholdForm() {
