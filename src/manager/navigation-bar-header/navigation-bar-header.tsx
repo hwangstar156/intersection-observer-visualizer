@@ -37,8 +37,8 @@ function Toggle() {
   const [isOpen, setOpen] = useToggleContext();
 
   const src = isOpen
-    ? '../../../public/icon-arrow-left-small-mono.svg'
-    : '../../../public/icon-arrow-right-small-mono.svg';
+    ? '/icon-arrow-left-small-mono.svg'
+    : '/public/icon-arrow-right-small-mono.svg';
 
   const handleClickToggle = () => {
     setOpen((prev) => !prev);
