@@ -44,6 +44,7 @@ export function App() {
         <MainContainer>
           <IframeContainer>
             <Ifame
+              className="io-iframe"
               src="http://localhost:3004/rentacar"
               width={1000}
               height={800}
