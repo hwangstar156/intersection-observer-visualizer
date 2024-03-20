@@ -10,6 +10,7 @@ import { ThresholdForm } from './observer-option-form/threshold-form';
 import { TabWidget } from './tabs/widget';
 import { Formik, FormikHelpers, FormikProvider, useFormik } from 'formik';
 import { SELECT_UNIT_LIST } from './observer-option-form/constants';
+import { emit } from '../util/custom-event';
 
 const Container = styled.div<{ isOpen: boolean }>`
   width: 250px;
@@ -70,6 +71,8 @@ const initialValues = {
   },
 };
 
+export type IntersectionObserverOptionFormType = typeof initialValues;
+
 export function LeftNavigationBar() {
   const [tabOptions] = useTabContext();
   const [isOpen] = useToggleContext();
@@ -77,7 +80,8 @@ export function LeftNavigationBar() {
   const formikObject = useFormik({
     initialValues,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      // customEvent로 values 정보 보내기
+      emit(window, '@submit', values);
     },
   });
 
