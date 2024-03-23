@@ -46,8 +46,8 @@ export function App() {
             <Ifame
               className="io-iframe"
               src="http://localhost:3004/rentacar"
-              width={1000}
-              height={800}
+              width={1100}
+              height={620}
               allowFullScreen
             ></Ifame>
           </IframeContainer>
