@@ -1,7 +1,8 @@
 {
+  "exclude": [".*\\.tsx$"],
   "$schema": "https://json.schemastore.org/swcrc",
   "module": {
-    "type": "umd"
+    "type": "commonjs"
   },
   "sourceMaps": true,
   "jsc": {
