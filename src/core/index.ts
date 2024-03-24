@@ -54,7 +54,9 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
   ) {
     // options 파싱진행 -> 사용자 custom input을 한다면 그것을 기반으로, 없다면 기본값으로 할 수 있도록 설정
 
-    if (!options?.enabled) {
+    const enabled = window.__IOV_ALL_ENABLED__ || options?.enabled;
+
+    if (!enabled) {
       super(callback, options);
       this.id = null;
       this.enabled = false;
