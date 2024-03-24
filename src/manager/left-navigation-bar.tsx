@@ -126,11 +126,6 @@ export function LeftNavigationBar() {
       // div.style.transform = 'scale(0.75)';
       div.style.transition = 'opacity 100s ease-in';
 
-      console.log({ left });
-      console.log({ top });
-      console.log({ right: right - width });
-      console.log({ bottom: bottom - height });
-
       requestAnimationFrame(() =>
         requestAnimationFrame(() => {
           div.style.opacity = '0';
@@ -159,10 +154,6 @@ export function LeftNavigationBar() {
 
         const x = rect.left + window.scrollX - 1;
         const y = rect.top + window.scrollY - 1;
-
-        console.log({ rect });
-        console.log({ boundingClientRect });
-        console.log({ rootBounds });
 
         if (!rootBounds) {
           console.log('rootBounds가 없습니다.');
