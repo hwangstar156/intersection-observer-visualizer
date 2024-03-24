@@ -42,12 +42,24 @@ const setOptions = (hashId: string | null) => {
 };
 
 export class IntersectionObserverVisualizer extends IntersectionObserver {
+  id: string | null;
   enabled: boolean;
-  entry: IntersectionObserverEntry | null;
-  customOptions: IntersectionObserverInit | { isActive: boolean };
+  options1;
 
-  constructor(callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {
+  static lastId = 0;
+
+  constructor(
+    callback: IntersectionObserverCallback,
+    options?: IntersectionObserverInit & { enabled?: boolean },
+  ) {
     // options 파싱진행 -> 사용자 custom input을 한다면 그것을 기반으로, 없다면 기본값으로 할 수 있도록 설정
+
+    if (!options?.enabled) {
+      super(callback, options);
+      this.id = null;
+      this.enabled = false;
+      return;
+    }
 
     if (options?.root instanceof Element) {
       options?.root.classList.add('iov-1'); // TODO: hash id로 뒤에 변경
@@ -56,8 +68,24 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
 
     super(intersectDecorator(callback), options);
 
+    if (!options?.root) {
+      console.log({ root: document });
+    } else {
+      console.log({ root: options?.root });
+    }
+
+    this.id = `iov-${IntersectionObserverVisualizer.lastId++}`;
     this.enabled = true;
-    this.customOptions = { root: options?.root, isActive: false };
-    this.entry = null;
+    this.options1 = options;
+  }
+
+  observe(target: Element): void {
+    super.observe(target);
+
+    if (this.enabled) {
+      console.log({ id: this.id, options: this.options1 });
+    }
+
+    // console.log({ target });
   }
 }
