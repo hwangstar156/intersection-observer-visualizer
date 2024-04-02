@@ -1,5 +1,4 @@
 import { css, styled } from 'styled-components';
-import { ObserverType } from './observer-list';
 
 const Container = styled.div<{ isActive: boolean }>`
   width: 100%;
@@ -32,13 +31,16 @@ const Emoji = styled.span`
   margin-right: 16px;
 `;
 
-interface ObserverItemProps extends ObserverType {}
+interface ObserverItemProps {
+  title: string;
+  isActive: boolean;
+}
 
 export function ObserverItem({ title, isActive }: ObserverItemProps) {
   return (
     <Container isActive={isActive}>
       <Emoji>📜</Emoji>
-      {title}
+      <>{title}</>
     </Container>
   );
 }
