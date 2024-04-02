@@ -1,7 +1,9 @@
 import styled from 'styled-components';
-import { TabProvider } from './manager/context/tab';
-import { ToggleProvider } from './manager/context/toggle';
+
 import { LeftNavigationBar } from './manager/left-navigation-bar';
+import { useIdMapContext } from './manager/context/idMap';
+import { useEffect } from 'react';
+import { iframeToParentEventEmitter } from './util/messageEvent';
 
 const IframeContainer = styled.div`
   padding: 10px;
@@ -36,23 +38,68 @@ const MainContainer = styled.div`
   margin-left: 350px;
 `;
 
+interface TargetInfoMessageType {
+  key: string;
+  isDocumentRoot: boolean;
+  id: string;
+  currentPath: string;
+}
+
+const isTargetInfoMessage = (e: MessageEvent<object>): e is MessageEvent<TargetInfoMessageType> => {
+  const data = e.data;
+
+  return 'key' in data && 'id' in data;
+};
+
 export function App() {
+  const [_, setIdMap] = useIdMapContext();
+
+  useEffect(() => {
+    iframeToParentEventEmitter.on((e: MessageEvent<object>) => {
+      if (!isTargetInfoMessage(e)) {
+        return;
+      }
+
+      if (e.data.key !== 'targetInfo') {
+        return;
+      }
+
+      const { id, isDocumentRoot, currentPath } = e.data;
+
+      console.log(id, isDocumentRoot, currentPath);
+
+      const $iframe = document.querySelector('.io-iframe') satisfies HTMLIFrameElement | null;
+
+      if ($iframe) {
+        const targetClassName = `${id}-target`;
+        const rootClassName = isDocumentRoot ? null : `${id}-root`;
+
+        setIdMap((prev) => ({
+          ...prev,
+          [id as string]: {
+            rootClassName,
+            targetClassName,
+            currentPath,
+          },
+        }));
+      }
+    });
+  }, []);
+
   return (
-    <ToggleProvider>
-      <TabProvider>
-        <LeftNavigationBar />
-        <MainContainer>
-          <IframeContainer>
-            <Ifame
-              className="io-iframe"
-              src="http://localhost:3004/rentacar"
-              width={1100}
-              height={620}
-              allowFullScreen
-            ></Ifame>
-          </IframeContainer>
-        </MainContainer>
-      </TabProvider>
-    </ToggleProvider>
+    <>
+      <LeftNavigationBar />
+      <MainContainer>
+        <IframeContainer>
+          <Ifame
+            className="io-iframe"
+            src="http://localhost:3004/rentacar"
+            width={1100}
+            height={620}
+            allowFullScreen
+          ></Ifame>
+        </IframeContainer>
+      </MainContainer>
+    </>
   );
 }
