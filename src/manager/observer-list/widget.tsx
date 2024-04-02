@@ -1,8 +1,13 @@
+import { useEffect } from 'react';
 import { useObserverList } from '../hooks/use-observer-list';
 import { ObserverList } from './observer-list';
 
 export function ObserverListWidget() {
-  const { items } = useObserverList();
+  const { observerList } = useObserverList();
 
-  return <ObserverList items={items} />;
+  useEffect(() => {
+    console.log('observerList', observerList);
+  }, [observerList]);
+
+  return <ObserverList list={observerList} />;
 }

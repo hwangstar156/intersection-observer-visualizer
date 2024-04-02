@@ -8,18 +8,32 @@ const Container = styled.div`
   margin-top: 50px;
 `;
 
-export type ObserverType = { title: string; isActive: boolean };
+export type ObserverType = Record<
+  string,
+  Record<string, { rootClassName: string; targetClassName: string }>
+>;
 
 interface ObserverListProps {
-  items: ObserverType[];
+  list: ObserverType;
 }
 
-export function ObserverList({ items }: ObserverListProps) {
+export function ObserverList({ list }: ObserverListProps) {
+  console.log({ list });
+
   return (
-    <Container>
-      {items.map((item, idx) => (
-        <ObserverItem {...item} key={idx} />
-      ))}
-    </Container>
+    <>
+      {Object.entries(list).map(([key, value], idx) => {
+        return (
+          <Container key={idx}>
+            <ObserverItem title={key} isActive={idx === 0} />
+            <>
+              {Object.entries(value).map(([key, value]) => {
+                return <span>{key}</span>;
+              })}
+            </>
+          </Container>
+        );
+      })}
+    </>
   );
 }
