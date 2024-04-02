@@ -8,10 +8,11 @@ import { ObserverRootOptionButton } from './observer-option-form/observer-root-o
 import { RootMarginForm } from './observer-option-form/root-margin-form';
 import { ThresholdForm } from './observer-option-form/threshold-form';
 import { TabWidget } from './tabs/widget';
-import { Formik, FormikHelpers, FormikProvider, useFormik } from 'formik';
+import { FormikProvider, useFormik } from 'formik';
 import { SELECT_UNIT_LIST } from './observer-option-form/constants';
 import { emit } from '../util/custom-event';
 import { useEffect } from 'react';
+import { useIdMapContext } from './context/idMap';
 
 const Container = styled.div<{ isOpen: boolean }>`
   width: 250px;
@@ -71,6 +72,7 @@ const initialValues = {
     value: 0,
   },
 };
+export type IntersectionObserverOptionFormType = typeof initialValues;
 
 interface CreateRectArgs {
   x: number;
@@ -83,11 +85,13 @@ interface CreateRectArgs {
   top: number;
   width: number;
 }
-export type IntersectionObserverOptionFormType = typeof initialValues;
 
 export function LeftNavigationBar() {
   const [tabOptions] = useTabContext();
+  const [idMap] = useIdMapContext();
   const [isOpen] = useToggleContext();
+
+  console.log('idMap', idMap.data);
 
   const formikObject = useFormik({
     initialValues,
@@ -186,7 +190,7 @@ export function LeftNavigationBar() {
       });
     };
 
-    drawRectByMessage();
+    // drawRectByMessage();
   }, []);
 
   return (
