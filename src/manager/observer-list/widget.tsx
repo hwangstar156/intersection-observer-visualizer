@@ -1,13 +1,8 @@
-import { useEffect } from 'react';
 import { useObserverList } from '../hooks/use-observer-list';
 import { ObserverList } from './observer-list';
 
 export function ObserverListWidget() {
-  const { observerList } = useObserverList();
+  const { observerList, handleClickFolder } = useObserverList();
 
-  useEffect(() => {
-    console.log('observerList', observerList);
-  }, [observerList]);
-
-  return <ObserverList list={observerList} />;
+  return <ObserverList list={observerList} onClickFolder={handleClickFolder} />;
 }

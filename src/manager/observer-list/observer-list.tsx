@@ -1,36 +1,33 @@
 import { styled } from 'styled-components';
+import { ObserverListType } from '../hooks/use-observer-list';
 import { ObserverItem } from './observer-item';
+import { ObserverSubItem } from './observer-sub-item';
 
 const Container = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-top: 50px;
 `;
 
-export type ObserverType = Record<
-  string,
-  Record<string, { rootClassName: string; targetClassName: string }>
->;
-
 interface ObserverListProps {
-  list: ObserverType;
+  list: ObserverListType;
+  onClickFolder: (folderName: string) => void;
 }
 
-export function ObserverList({ list }: ObserverListProps) {
-  console.log({ list });
-
+export function ObserverList({ list, onClickFolder }: ObserverListProps) {
   return (
     <>
       {Object.entries(list).map(([key, value], idx) => {
         return (
           <Container key={idx}>
-            <ObserverItem title={key} isActive={idx === 0} />
-            <>
-              {Object.entries(value).map(([key, value]) => {
-                return <span>{key}</span>;
-              })}
-            </>
+            <ObserverItem title={key} isActive={value.isExpand} onClickFolder={onClickFolder} />
+            {value.isExpand ? (
+              <>
+                {Object.entries(value.observers).map(([key, value]) => {
+                  return <ObserverSubItem title={key} />;
+                })}
+              </>
+            ) : null}
           </Container>
         );
       })}
