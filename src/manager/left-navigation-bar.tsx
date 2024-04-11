@@ -13,6 +13,7 @@ import { SELECT_UNIT_LIST } from './observer-option-form/constants';
 import { emit } from '../util/custom-event';
 import { useEffect } from 'react';
 import { useIdMapContext } from './context/idMap';
+import { useCurrentId } from './context/currentId';
 
 const Container = styled.div<{ isOpen: boolean }>`
   width: 250px;
@@ -88,10 +89,8 @@ interface CreateRectArgs {
 
 export function LeftNavigationBar() {
   const [tabOptions] = useTabContext();
-  const [idMap] = useIdMapContext();
   const [isOpen] = useToggleContext();
-
-  console.log('idMap', idMap.data);
+  const [currentId] = useCurrentId();
 
   const formikObject = useFormik({
     initialValues,

@@ -16,15 +16,10 @@ const Container = styled.div<{ isActive: boolean }>`
   ${({ isActive, theme }) =>
     isActive &&
     css`
-      &::before {
-        content: '';
-        background-color: ${theme.colors.primary};
-        color: ${theme.colors.black001};
-        width: 100%;
-        height: 100%;
-        opacity: 0.6;
-        border: 1px solid #0067a3;
-      }
+      background-color: ${theme.colors.primary};
+      font-weight: 700;
+      width: 100%;
+      height: 100%;
 
       &:hover {
         filter: none;
@@ -35,8 +30,13 @@ const Container = styled.div<{ isActive: boolean }>`
 interface ObserverSubItemProps {
   title: string;
   isActive: boolean;
+  onChangeCurrentId: (id: string) => void;
 }
 
-export function ObserverSubItem({ title, isActive }: ObserverSubItemProps) {
-  return <Container isActive={isActive}>{title}</Container>;
+export function ObserverSubItem({ title, isActive, onChangeCurrentId }: ObserverSubItemProps) {
+  return (
+    <Container isActive={isActive} onClick={() => onChangeCurrentId(title)}>
+      {title}
+    </Container>
+  );
 }
