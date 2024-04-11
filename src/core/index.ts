@@ -53,9 +53,34 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
   enabled: boolean;
   iovRoot: IntersectionObserverInit['root'];
   iovTarget?: Element;
+  options?: IntersectionObserverInit;
   visualizerInitMap: Map<string, boolean>;
+  isInitCache: boolean;
 
   static lastId = 0;
+  static tempIdCachedMap = new Map<
+    string,
+    {
+      id: string;
+      idx: number;
+      root: IntersectionObserverInit['root'];
+      target?: Element;
+      rootMargin?: string;
+      threshold?: number | number[];
+    }[]
+  >();
+  static idCachedMap = new Map<
+    string,
+    {
+      id: string;
+      idx: number;
+      root: IntersectionObserverInit['root'];
+      target?: Element;
+      rootMargin?: string;
+      threshold?: number | number[];
+    }[]
+  >();
+  static currentServicePath: string | null = null;
 
   constructor(
     callback: IntersectionObserverCallback,
@@ -63,7 +88,12 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
   ) {
     // options 파싱진행 -> 사용자 custom input을 한다면 그것을 기반으로, 없다면 기본값으로 할 수 있도록 설정
 
-    const enabled = !!(window.__IOV_ALL_ENABLED__ || options?.enabled);
+    const callStack = new Error().stack;
+    const isExternalObserver = callStack?.includes(
+      'node_modules/next/dist/client/use-intersection.js',
+    );
+
+    const enabled = !!(!isExternalObserver && (window.__IOV_ALL_ENABLED__ || options?.enabled));
 
     super(enabled ? intersectDecorator(callback) : callback, options);
 
@@ -79,8 +109,16 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
       this.id = null;
     }
 
+    if (IntersectionObserverVisualizer.currentServicePath !== window.location.pathname) {
+      IntersectionObserverVisualizer.currentServicePath = window.location.pathname;
+      this.syncIdCacheMap();
+    }
+
     this.enabled = enabled;
+    this.options = options;
     this.visualizerInitMap = new Map();
+    this.isInitCache = false;
+    this.initWhenExistCache();
   }
 
   observe(target: Element): void {
@@ -89,7 +127,9 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
     if (this.enabled) {
       this.iovTarget = target;
 
-      this.init();
+      if (!this.isInitCache) {
+        this.init();
+      }
     }
   }
 
@@ -101,8 +141,76 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
     return null;
   }
 
+  syncIdCacheMap() {
+    IntersectionObserverVisualizer.idCachedMap = new Map([
+      ...IntersectionObserverVisualizer.tempIdCachedMap,
+    ]);
+  }
+
+  initWhenExistCache() {
+    const cache = IntersectionObserverVisualizer.idCachedMap.get(window.location.pathname);
+
+    console.log(window.location.pathname, cache);
+
+    if (cache) {
+      let cacheIdx = null;
+
+      for (const [idx, value] of cache.entries()) {
+        let isEqualOption = false;
+
+        if (
+          value.rootMargin === this.options?.rootMargin &&
+          value.threshold === this.options?.threshold
+        ) {
+          isEqualOption = true;
+        }
+
+        if (isEqualOption && idx === value.idx) {
+          cacheIdx = idx;
+        }
+      }
+
+      if (cacheIdx) {
+        if (this.iovRoot instanceof Element) {
+          this.iovRoot.classList.add(`${cache[cacheIdx].id}-root`);
+        }
+
+        if (this.iovTarget instanceof Element) {
+          this.iovTarget.classList.add(`${cache[cacheIdx].id}-target`);
+        }
+
+        iframeToParentEventEmitter.emit({
+          key: 'targetInfo',
+          id: cache[cacheIdx].id,
+          isDocumentRoot: this.iovRoot instanceof Document,
+          currentPath: window.location.pathname,
+        });
+
+        this.isInitCache = true;
+
+        return;
+      }
+    }
+  }
+
   init() {
+    const tempCache = IntersectionObserverVisualizer.tempIdCachedMap.get(window.location.pathname);
+
     if (this.id && !this.visualizerInitMap.get(this.id)) {
+      if (
+        this.iovRoot instanceof Element &&
+        this.iovRoot.classList.value.split(' ').some((value) => value.includes('iov'))
+      ) {
+        return;
+      }
+
+      if (
+        this.iovTarget instanceof Element &&
+        this.iovTarget.classList.value.split(' ').some((value) => value.includes('iov'))
+      ) {
+        return;
+      }
+
       if (this.iovRoot instanceof Element) {
         this.iovRoot.classList.add(`${this.id}-root`);
       }
@@ -132,6 +240,33 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
       }
 
       this.visualizerInitMap.set(this.id, true);
+
+      console.log('tempIdCachedMap', IntersectionObserverVisualizer.tempIdCachedMap);
+
+      if (tempCache) {
+        IntersectionObserverVisualizer.tempIdCachedMap.set(
+          window.location.pathname,
+          tempCache.concat({
+            id: this.id,
+            root: this.iovRoot,
+            target: this.iovTarget,
+            rootMargin: this.options?.rootMargin,
+            threshold: this.options?.threshold,
+            idx: tempCache.length,
+          }),
+        );
+      } else {
+        IntersectionObserverVisualizer.tempIdCachedMap.set(window.location.pathname, [
+          {
+            id: this.id,
+            root: this.iovRoot,
+            target: this.iovTarget,
+            rootMargin: this.options?.rootMargin,
+            threshold: this.options?.threshold,
+            idx: 0,
+          },
+        ]);
+      }
     }
   }
 

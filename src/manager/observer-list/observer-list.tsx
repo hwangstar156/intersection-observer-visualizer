@@ -11,10 +11,17 @@ const Container = styled.div`
 
 interface ObserverListProps {
   list: ObserverListType;
+  currentId: string | null;
   onClickFolder: (folderName: string) => void;
+  onChangeCurrentId: (id: string) => void;
 }
 
-export function ObserverList({ list, onClickFolder }: ObserverListProps) {
+export function ObserverList({
+  list,
+  onClickFolder,
+  onChangeCurrentId,
+  currentId,
+}: ObserverListProps) {
   return (
     <>
       {Object.entries(list).map(([key, value], idx) => {
@@ -23,9 +30,17 @@ export function ObserverList({ list, onClickFolder }: ObserverListProps) {
             <ObserverItem title={key} isActive={value.isExpand} onClickFolder={onClickFolder} />
             {value.isExpand ? (
               <>
-                {Object.entries(value.observers).map(([key, value]) => {
-                  return <ObserverSubItem title={key} />;
-                })}
+                {value.observers &&
+                  Object.entries(value.observers).map(([key, value]) => {
+                    return (
+                      <ObserverSubItem
+                        key={key}
+                        title={key}
+                        isActive={currentId === key}
+                        onChangeCurrentId={onChangeCurrentId}
+                      />
+                    );
+                  })}
               </>
             ) : null}
           </Container>

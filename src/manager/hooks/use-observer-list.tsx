@@ -41,6 +41,8 @@ export function useObserverList() {
   const [idMap] = useIdMapContext();
   const [observerList, setObserverList] = useState<ObserverListType>({});
 
+  console.log(observerList);
+
   useEffect(() => {
     const observerList = Object.entries(idMap).reduce(
       (acc: { [key: string]: { observers: object; isExpand: boolean } }, [key, value]) => {
@@ -50,7 +52,7 @@ export function useObserverList() {
           ...acc,
           [value.currentPath]: {
             observers: {
-              ...acc[value.currentPath]['observers'],
+              ...acc[value.currentPath]?.['observers'],
               [key]: {
                 rootClassName: value.rootClassName,
                 targetClassName: value.targetClassName,
@@ -63,8 +65,8 @@ export function useObserverList() {
       {},
     ) as ObserverListType;
 
-    setObserverList(TEST_OBSERVER_LIST);
-  });
+    setObserverList(observerList);
+  }, [idMap]);
 
   const handleClickFolder = (folderName: string) => {
     setObserverList((prev) => {
