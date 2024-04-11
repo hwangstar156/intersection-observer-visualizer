@@ -80,5 +80,8 @@
   "dependencies": {
     "formik": "^2.4.5",
     "vite": "^5.1.4"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
   }
 }
