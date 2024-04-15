@@ -19,7 +19,7 @@ type Root = {
   };
 };
 
-type Target = {
+export type Target = {
   [key: string]: {
     rootClassName: string | null;
     targetId: string;

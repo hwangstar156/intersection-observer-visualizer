@@ -14,6 +14,7 @@ import { emit } from '../util/custom-event';
 import { useEffect } from 'react';
 import { useCurrentId } from './context/currentId';
 import { match } from 'ts-pattern';
+import { ObserverControlsForm } from './observer-controls-form/observer-controls-form';
 
 const Container = styled.div<{ isOpen: boolean }>`
   width: 300px;
@@ -210,7 +211,7 @@ export function LeftNavigationBar() {
                 </OptionFormContainer>
               </FormikProvider>
             ))
-            .with('CONTROLS', () => null)
+            .with('CONTROLS', () => <ObserverControlsForm />)
             .otherwise(() => null)}
         </>
       ) : null}
