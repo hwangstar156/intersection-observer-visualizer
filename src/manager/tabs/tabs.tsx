@@ -5,6 +5,7 @@ import { Tab } from './tab';
 
 const Container = styled.div`
   width: 100%;
+  overflow: auto;
   height: 40px;
   display: flex;
 `;

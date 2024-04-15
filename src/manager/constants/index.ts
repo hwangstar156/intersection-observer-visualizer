@@ -7,4 +7,8 @@ export const DEFAULT_TAB_OPTIONS = [
     title: 'OPTIONS',
     isActive: false,
   },
+  {
+    title: 'CONTROLS',
+    isActive: false,
+  },
 ];

@@ -35,7 +35,7 @@ const Ifame = styled.iframe`
 `;
 
 const MainContainer = styled.div`
-  margin-left: 350px;
+  margin-left: 400px;
 `;
 
 interface TargetInfoMessageType {

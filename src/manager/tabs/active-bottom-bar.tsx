@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 
 const Container = styled.div<{ activeTabIndex: number }>`
-  width: 50%;
+  width: 33%;
   height: 1px;
   background-color: ${({ theme }) => theme.colors.primary};
 
