@@ -1,14 +1,1 @@
-export const DEFAULT_TAB_OPTIONS = [
-  {
-    title: 'CATEGORY',
-    isActive: true,
-  },
-  {
-    title: 'OPTIONS',
-    isActive: false,
-  },
-  {
-    title: 'CONTROLS',
-    isActive: false,
-  },
-];
+export const DEFAULT_TAB_OPTIONS = ['CATEGORY', 'OPTIONS', 'CONTROLS'] as const;
