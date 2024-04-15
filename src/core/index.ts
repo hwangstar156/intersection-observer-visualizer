@@ -221,14 +221,14 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
         this.iovTarget.classList.add(targetId);
       }
 
-      console.log({ targetId });
-
       iframeToParentEventEmitter.emit({
         key: 'targetInfo',
         id: this.id,
         targetId,
         isDocumentRoot: this.iovRoot instanceof Document,
         currentPath: window.location.pathname,
+        rootMargin: this.options?.rootMargin,
+        threshold: this.options?.threshold,
       });
 
       const rootRect = this.getRootBounds();

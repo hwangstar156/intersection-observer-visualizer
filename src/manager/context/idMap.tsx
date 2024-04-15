@@ -23,6 +23,8 @@ type Target = {
   [key: string]: {
     rootClassName: string | null;
     targetId: string;
+    threshold: IntersectionObserverInit['threshold'];
+    rootMargin: IntersectionObserverInit['rootMargin'];
   };
 };
 
