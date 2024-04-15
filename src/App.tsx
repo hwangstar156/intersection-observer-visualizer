@@ -44,6 +44,8 @@ interface TargetInfoMessageType {
   id: string;
   targetId: string;
   currentPath: string;
+  rootMargin: IntersectionObserverInit['rootMargin'];
+  threshold: IntersectionObserverInit['threshold'];
 }
 
 const isTargetInfoMessage = (e: MessageEvent<object>): e is MessageEvent<TargetInfoMessageType> => {
@@ -65,9 +67,9 @@ export function App() {
         return;
       }
 
-      const { id, isDocumentRoot, currentPath, targetId } = e.data;
+      const { id, isDocumentRoot, currentPath, targetId, rootMargin, threshold } = e.data;
 
-      console.log(id, isDocumentRoot, currentPath, targetId);
+      console.log(id, isDocumentRoot, currentPath, targetId, rootMargin, threshold);
 
       const $iframe = document.querySelector('.io-iframe') satisfies HTMLIFrameElement | null;
 
@@ -87,6 +89,8 @@ export function App() {
                   [targetClassName]: {
                     rootClassName,
                     targetId,
+                    rootMargin,
+                    threshold,
                   },
                 },
                 isExpand: false,
