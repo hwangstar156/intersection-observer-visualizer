@@ -42,6 +42,7 @@ interface TargetInfoMessageType {
   key: string;
   isDocumentRoot: boolean;
   id: string;
+  targetId: string;
   currentPath: string;
 }
 
@@ -64,22 +65,34 @@ export function App() {
         return;
       }
 
-      const { id, isDocumentRoot, currentPath } = e.data;
+      const { id, isDocumentRoot, currentPath, targetId } = e.data;
 
-      console.log(id, isDocumentRoot, currentPath);
+      console.log(id, isDocumentRoot, currentPath, targetId);
 
       const $iframe = document.querySelector('.io-iframe') satisfies HTMLIFrameElement | null;
 
       if ($iframe) {
-        const targetClassName = `${id}-target`;
+        const targetClassName = targetId;
         const rootClassName = isDocumentRoot ? null : `${id}-root`;
 
         setIdMap((prev) => ({
           ...prev,
-          [id as string]: {
-            rootClassName,
-            targetClassName,
-            currentPath,
+          [currentPath]: {
+            ...prev?.[currentPath],
+            rootObservers: {
+              ...prev?.[currentPath]?.rootObservers,
+              [id as string]: {
+                targetObservers: {
+                  ...prev?.[currentPath]?.rootObservers?.[id]?.targetObservers,
+                  [targetClassName]: {
+                    rootClassName,
+                    targetId,
+                  },
+                },
+                isExpand: false,
+              },
+            },
+            isExpand: false,
           },
         }));
       }

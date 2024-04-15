@@ -56,6 +56,7 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
   options?: IntersectionObserverInit;
   visualizerInitMap: Map<string, boolean>;
   isInitCache: boolean;
+  targetId: number;
 
   static lastId = 0;
   static tempIdCachedMap = new Map<
@@ -118,6 +119,7 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
     this.options = options;
     this.visualizerInitMap = new Map();
     this.isInitCache = false;
+    this.targetId = 0;
     this.initWhenExistCache();
   }
 
@@ -128,7 +130,7 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
       this.iovTarget = target;
 
       if (!this.isInitCache) {
-        this.init();
+        this.init(`target-${this.targetId++}`);
       }
     }
   }
@@ -193,10 +195,10 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
     }
   }
 
-  init() {
+  init(targetId: string) {
     const tempCache = IntersectionObserverVisualizer.tempIdCachedMap.get(window.location.pathname);
 
-    if (this.id && !this.visualizerInitMap.get(this.id)) {
+    if (this.id) {
       if (
         this.iovRoot instanceof Element &&
         this.iovRoot.classList.value.split(' ').some((value) => value.includes('iov'))
@@ -206,7 +208,7 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
 
       if (
         this.iovTarget instanceof Element &&
-        this.iovTarget.classList.value.split(' ').some((value) => value.includes('iov'))
+        this.iovTarget.classList.value.split(' ').some((value) => value.includes('target-'))
       ) {
         return;
       }
@@ -216,12 +218,15 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
       }
 
       if (this.iovTarget instanceof Element) {
-        this.iovTarget.classList.add(`${this.id}-target`);
+        this.iovTarget.classList.add(targetId);
       }
+
+      console.log({ targetId });
 
       iframeToParentEventEmitter.emit({
         key: 'targetInfo',
         id: this.id,
+        targetId,
         isDocumentRoot: this.iovRoot instanceof Document,
         currentPath: window.location.pathname,
       });

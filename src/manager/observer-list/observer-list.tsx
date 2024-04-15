@@ -1,7 +1,8 @@
 import { styled } from 'styled-components';
 import { ObserverListType } from '../hooks/use-observer-list';
 import { ObserverItem } from './observer-item';
-import { ObserverSubItem } from './observer-sub-item';
+import { ObserverRootItem } from './observer-root-item';
+import { ObserverTargetItem } from './observer-target-item';
 
 const Container = styled.div`
   width: 100%;
@@ -12,33 +13,59 @@ const Container = styled.div`
 interface ObserverListProps {
   list: ObserverListType;
   currentId: string | null;
-  onClickFolder: (folderName: string) => void;
+  onClickCurrentPathFolder: (folderName: string) => void;
+  onClickRootFolder: (currentPath: string, folderName: string) => void;
   onChangeCurrentId: (id: string) => void;
 }
 
 export function ObserverList({
   list,
-  onClickFolder,
+  onClickCurrentPathFolder,
+  onClickRootFolder,
   onChangeCurrentId,
   currentId,
 }: ObserverListProps) {
   return (
     <>
-      {Object.entries(list).map(([key, value], idx) => {
+      {Object.entries(list).map(([currentPath, value], idx) => {
         return (
           <Container key={idx}>
-            <ObserverItem title={key} isActive={value.isExpand} onClickFolder={onClickFolder} />
+            <ObserverItem
+              title={currentPath}
+              isActive={value.isExpand}
+              onClickFolder={onClickCurrentPathFolder}
+            />
             {value.isExpand ? (
               <>
-                {value.observers &&
-                  Object.entries(value.observers).map(([key, value]) => {
+                {value.rootObservers &&
+                  Object.entries(value.rootObservers).map(([root, value]) => {
                     return (
-                      <ObserverSubItem
-                        key={key}
-                        title={key}
-                        isActive={currentId === key}
-                        onChangeCurrentId={onChangeCurrentId}
-                      />
+                      <>
+                        <ObserverRootItem
+                          key={root}
+                          title={root}
+                          isActive={value.isExpand}
+                          currentPath={currentPath}
+                          onClickRootFolder={onClickRootFolder}
+                        />
+                        {value.isExpand ? (
+                          <>
+                            {value.targetObservers &&
+                              Object.entries(value.targetObservers).map(([target, value]) => {
+                                const targetKey = `${root}-${target}`;
+
+                                return (
+                                  <ObserverTargetItem
+                                    key={targetKey}
+                                    title={targetKey}
+                                    isActive={currentId === targetKey}
+                                    onChangeCurrentId={onChangeCurrentId}
+                                  />
+                                );
+                              })}
+                          </>
+                        ) : null}
+                      </>
                     );
                   })}
               </>

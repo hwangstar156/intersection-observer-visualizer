@@ -3,7 +3,7 @@ import { useObserverList } from '../hooks/use-observer-list';
 import { ObserverList } from './observer-list';
 
 export function ObserverListWidget() {
-  const { observerList, handleClickFolder } = useObserverList();
+  const { observerList, handleClickCurrentPathFolder, handleClickRootFolder } = useObserverList();
   const [currentId, setCurrentId] = useCurrentId();
 
   const handleChangeCurrentId = (id: string) => {
@@ -14,7 +14,8 @@ export function ObserverListWidget() {
     <ObserverList
       currentId={currentId}
       list={observerList}
-      onClickFolder={handleClickFolder}
+      onClickCurrentPathFolder={handleClickCurrentPathFolder}
+      onClickRootFolder={handleClickRootFolder}
       onChangeCurrentId={handleChangeCurrentId}
     />
   );
