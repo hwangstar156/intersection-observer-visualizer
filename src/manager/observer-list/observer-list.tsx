@@ -51,14 +51,12 @@ export function ObserverList({
                         {value.isExpand ? (
                           <>
                             {value.targetObservers &&
-                              Object.entries(value.targetObservers).map(([target, value]) => {
-                                const targetKey = `${root}-${target}`;
-
+                              Object.entries(value.targetObservers).map(([target]) => {
                                 return (
                                   <ObserverTargetItem
-                                    key={targetKey}
-                                    title={targetKey}
-                                    isActive={currentId === targetKey}
+                                    key={target}
+                                    title={target}
+                                    isActive={currentId === target}
                                     onChangeCurrentId={onChangeCurrentId}
                                   />
                                 );

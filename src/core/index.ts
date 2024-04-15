@@ -130,7 +130,7 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
       this.iovTarget = target;
 
       if (!this.isInitCache) {
-        this.init(`target-${this.targetId++}`);
+        this.init(`${this.id}-target-${this.targetId++}`);
       }
     }
   }
@@ -151,8 +151,6 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
 
   initWhenExistCache() {
     const cache = IntersectionObserverVisualizer.idCachedMap.get(window.location.pathname);
-
-    console.log(window.location.pathname, cache);
 
     if (cache) {
       let cacheIdx = null;
