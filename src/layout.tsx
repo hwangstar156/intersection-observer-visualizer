@@ -1,6 +1,6 @@
 import { CurrentIdProvider } from './manager/context/currentId';
 import { IdMapProvider } from './manager/context/idMap';
-import { TabProvider } from './manager/context/tab';
+import { CurrentTabProvider } from './manager/context/tab';
 import { ToggleProvider } from './manager/context/toggle';
 
 interface LayoutProps {
@@ -12,7 +12,7 @@ export const Layout = ({ children }: LayoutProps) => {
     <CurrentIdProvider>
       <IdMapProvider>
         <ToggleProvider>
-          <TabProvider>{children}</TabProvider>
+          <CurrentTabProvider>{children}</CurrentTabProvider>
         </ToggleProvider>
       </IdMapProvider>
     </CurrentIdProvider>

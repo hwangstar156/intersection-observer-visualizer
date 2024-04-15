@@ -1,17 +1,11 @@
-import { useTabContext } from '../context/tab';
+import { TabType, useCurrentTabContext } from '../context/tab';
 
 export function useTabs() {
-  const [tabOptions, setTabOptions] = useTabContext();
+  const [currentTab, setCurrentTab] = useCurrentTabContext();
 
-  const handleClickTabOption = ({ title }: { title: string }) => {
-    setTabOptions((prevTabOptions) => {
-      return prevTabOptions.map((option) =>
-        option.title === title ? { ...option, isActive: true } : { ...option, isActive: false },
-      );
-    });
+  const handleClickTabOption = ({ title }: { title: TabType }) => {
+    setCurrentTab(title);
   };
 
-  const activeTabIndex = tabOptions.findIndex((option) => option.isActive);
-
-  return { tabOptions, handleClickTabOption, activeTabIndex };
+  return { currentTab, handleClickTabOption };
 }
