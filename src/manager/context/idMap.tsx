@@ -2,11 +2,29 @@ import React, { createContext, SetStateAction, useContext, useState } from 'reac
 
 interface IdMapValue {
   rootClassName: string | null;
-  targetClassName: string;
-  currentPath: string;
+  targetId: string;
 }
 
-type IdMapType = Record<string, IdMapValue>;
+export type IdMapType = {
+  [key: string]: {
+    rootObservers: Root;
+    isExpand: boolean;
+  };
+};
+
+type Root = {
+  [key: string]: {
+    targetObservers: Target;
+    isExpand: boolean;
+  };
+};
+
+type Target = {
+  [key: string]: {
+    rootClassName: string | null;
+    targetId: string;
+  };
+};
 
 export const IdMapContext = createContext<
   [IdMapType, React.Dispatch<SetStateAction<IdMapType>>] | null
