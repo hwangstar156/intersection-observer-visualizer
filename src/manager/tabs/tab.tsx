@@ -5,7 +5,7 @@ const Container = styled.div<{ isActive: boolean }>`
   height: 40px;
   background: ${({ theme }) => theme.colors.black001};
   color: white;
-  font-size: 15px;
+  font-size: 13px;
   display: flex;
   align-items: center;
   justify-content: center;

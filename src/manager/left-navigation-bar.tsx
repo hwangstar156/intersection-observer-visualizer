@@ -16,7 +16,7 @@ import { useIdMapContext } from './context/idMap';
 import { useCurrentId } from './context/currentId';
 
 const Container = styled.div<{ isOpen: boolean }>`
-  width: 250px;
+  width: 300px;
   height: 100vh;
   background: ${({ theme }) => theme.colors.black001};
   position: fixed;
