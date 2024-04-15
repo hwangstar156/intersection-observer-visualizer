@@ -25,6 +25,7 @@ const Container = styled.div<{ isOpen: boolean }>`
   top: 0;
   bottom: 0;
   transition: 0.3s;
+  overflow-y: auto;
 
   ${({ isOpen }) =>
     !isOpen &&
