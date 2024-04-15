@@ -1,5 +1,5 @@
 import { css, styled } from 'styled-components';
-import { useTabContext } from './context/tab';
+import { useCurrentTabContext } from './context/tab';
 import { useToggleContext } from './context/toggle';
 import { NavigationBarHeader } from './navigation-bar-header/navigation-bar-header';
 import { ObserverListWidget } from './observer-list/widget';
@@ -12,8 +12,8 @@ import { FormikProvider, useFormik } from 'formik';
 import { SELECT_UNIT_LIST } from './observer-option-form/constants';
 import { emit } from '../util/custom-event';
 import { useEffect } from 'react';
-import { useIdMapContext } from './context/idMap';
 import { useCurrentId } from './context/currentId';
+import { match } from 'ts-pattern';
 
 const Container = styled.div<{ isOpen: boolean }>`
   width: 300px;
@@ -88,7 +88,7 @@ interface CreateRectArgs {
 }
 
 export function LeftNavigationBar() {
-  const [tabOptions] = useTabContext();
+  const [currentTab] = useCurrentTabContext();
   const [isOpen] = useToggleContext();
   const [currentId] = useCurrentId();
 
@@ -195,21 +195,23 @@ export function LeftNavigationBar() {
   return (
     <Container isOpen={isOpen}>
       <NavigationBarHeader />
+      <TabWidget />
       {isOpen ? (
         <>
-          <TabWidget />
-          {tabOptions[0].isActive ? (
-            <ObserverListWidget />
-          ) : (
-            <FormikProvider value={formikObject}>
-              <OptionFormContainer onSubmit={formikObject.handleSubmit}>
-                <ObserverRootOptionButton />
-                <RootMarginForm />
-                <ThresholdForm />
-                <ApplyButton />
-              </OptionFormContainer>
-            </FormikProvider>
-          )}
+          {match(currentTab)
+            .with('CATEGORY', () => <ObserverListWidget />)
+            .with('OPTIONS', () => (
+              <FormikProvider value={formikObject}>
+                <OptionFormContainer onSubmit={formikObject.handleSubmit}>
+                  <ObserverRootOptionButton />
+                  <RootMarginForm />
+                  <ThresholdForm />
+                  <ApplyButton />
+                </OptionFormContainer>
+              </FormikProvider>
+            ))
+            .with('CONTROLS', () => null)
+            .otherwise(() => null)}
         </>
       ) : null}
     </Container>
