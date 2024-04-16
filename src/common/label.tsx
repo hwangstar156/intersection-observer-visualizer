@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const StyledLabel = styled.label<{ fontSize: number; color?: string }>`
   color: ${({ color }) => (color ? color : '#cdcdcd')};
   font-size: ${({ fontSize }) => (fontSize ? `${fontSize}px` : '14px')};
+  line-height: 1.5;
 `;
 
 interface LabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
