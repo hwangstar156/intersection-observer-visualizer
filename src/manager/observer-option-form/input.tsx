@@ -1,4 +1,4 @@
-import { useFormikContext } from 'formik';
+import { Field, useFormikContext } from 'formik';
 import { ChangeEvent } from 'react';
 import styled from 'styled-components';
 import { CommonInput } from '../../common/common-input';
@@ -38,17 +38,23 @@ export function ThresholdInput({ width, height, name }: InputProps) {
         name={name}
       />
       <InputWrapper>
-        <CommonInput
-          id={name}
-          width={width}
-          height={height}
-          type="text"
-          value={values['threshold']['value']}
-          disabled
-          hasSuffixInput={false}
-          name={name}
-          onChange={handleChangeInput}
-        ></CommonInput>
+        <Field name={name}>
+          {() => {
+            return (
+              <CommonInput
+                id={name}
+                width={width}
+                height={height}
+                type="text"
+                value={values['threshold']['value']}
+                disabled
+                hasSuffixInput={false}
+                name={name}
+                onChange={handleChangeInput}
+              ></CommonInput>
+            );
+          }}
+        </Field>
       </InputWrapper>
     </>
   );
