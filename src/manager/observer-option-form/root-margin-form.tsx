@@ -8,7 +8,7 @@ const RootMarginContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   height: 450px;
-  margin-bottom: 30px;
+  margin-bottom: 80px;
 `;
 
 const Container = styled.div`
