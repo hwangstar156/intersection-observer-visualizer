@@ -6,6 +6,7 @@ import { useCurrentTarget } from '../context/currentTarget';
 import { ActiveButton } from './active-button';
 import React, { useState } from 'react';
 import { CommonInput } from '../../common/common-input';
+import { EmptyTargetForm } from './empty-target-form';
 
 const FormContainer = styled.div`
   display: flex;
@@ -61,6 +62,10 @@ export function ObserverControlsForm() {
       setDuration(value);
     }
   };
+
+  if (!currentTarget) {
+    return <EmptyTargetForm />;
+  }
 
   return (
     <>
