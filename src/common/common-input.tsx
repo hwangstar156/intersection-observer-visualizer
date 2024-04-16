@@ -2,13 +2,13 @@ import { Field } from 'formik';
 import { InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
 
-interface RangeInputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface CommonInputProps extends InputHTMLAttributes<HTMLInputElement> {
   width?: number;
   height: number;
   hasSuffixInput: boolean;
 }
 
-const StyledInput = styled.input<RangeInputProps>`
+const StyledInput = styled.input<CommonInputProps>`
   outline: none;
   padding-left: 5px;
   border: 1px solid transparent;
@@ -29,7 +29,7 @@ const StyledInput = styled.input<RangeInputProps>`
   }
 `;
 
-const Container = styled.div<Pick<RangeInputProps, 'height' | 'width'>>`
+const Container = styled.div<Pick<CommonInputProps, 'height' | 'width'>>`
   position: relative;
   display: flex;
   align-items: center;
@@ -47,21 +47,15 @@ const Container = styled.div<Pick<RangeInputProps, 'height' | 'width'>>`
   }
 `;
 
-export function CommonInput({ children, ...args }: RangeInputProps) {
+export function CommonInput({ children, ...args }: CommonInputProps) {
   // TODO: 예외처리 추가
 
   const { name } = args;
 
   return (
-    <Field name={name}>
-      {() => {
-        return (
-          <Container {...args}>
-            <StyledInput {...args} />
-            {children}
-          </Container>
-        );
-      }}
-    </Field>
+    <Container {...args}>
+      <StyledInput {...args} />
+      {children}
+    </Container>
   );
 }
