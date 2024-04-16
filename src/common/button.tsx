@@ -6,6 +6,8 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   height: number;
   borderRadius: number;
   backgroundColor: string;
+  color?: string;
+  borderColor?: string;
 }
 
 const StyledButton = styled.button<ButtonProps>`
@@ -16,7 +18,7 @@ const StyledButton = styled.button<ButtonProps>`
   outline: none;
   cursor: pointer;
   background-color: ${({ backgroundColor }) => backgroundColor};
-  border-color: transparent;
+  border: 1px solid ${({ borderColor }) => (borderColor ? borderColor : 'transparent')};
   color: ${({ color }) => (color ? color : '#fff')};
 
   &:hover {
@@ -29,7 +31,6 @@ const Container = styled.div`
   display: inline-block;
   width: 100%;
   font-size: 15px;
-  color: string;
 `;
 
 export function Button({ children, ...args }: ButtonProps) {
