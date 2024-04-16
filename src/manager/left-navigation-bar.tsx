@@ -4,7 +4,6 @@ import { useToggleContext } from './context/toggle';
 import { NavigationBarHeader } from './navigation-bar-header/navigation-bar-header';
 import { ObserverListWidget } from './observer-list/widget';
 import { ApplyButton } from './observer-option-form/apply-button';
-import { ObserverRootOptionButton } from './observer-option-form/observer-root-option-button';
 import { RootMarginForm } from './observer-option-form/root-margin-form';
 import { ThresholdForm } from './observer-option-form/threshold-form';
 import { TabWidget } from './tabs/widget';
@@ -39,6 +38,14 @@ const OptionFormContainer = styled.form`
   flex-direction: column;
   padding: 0 1.3rem;
   margin-top: 30px;
+`;
+
+const ControlFormContainer = styled.form`
+  display: flex;
+  flex-direction: column;
+  padding: 0 1.3rem;
+  margin-top: 30px;
+  height: 85%;
 `;
 
 interface ValueFormat {
@@ -205,14 +212,17 @@ export function LeftNavigationBar() {
             .with('OPTIONS', () => (
               <FormikProvider value={formikObject}>
                 <OptionFormContainer onSubmit={formikObject.handleSubmit}>
-                  <ObserverRootOptionButton />
                   <RootMarginForm />
                   <ThresholdForm />
                   <ApplyButton />
                 </OptionFormContainer>
               </FormikProvider>
             ))
-            .with('CONTROLS', () => <ObserverControlsForm />)
+            .with('CONTROLS', () => (
+              <ControlFormContainer>
+                <ObserverControlsForm />
+              </ControlFormContainer>
+            ))
             .otherwise(() => null)}
         </>
       ) : null}
