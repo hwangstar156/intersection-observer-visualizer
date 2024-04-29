@@ -7,6 +7,7 @@ import { ActiveButton } from './active-button';
 import React, { useState } from 'react';
 import { CommonInput } from '../../common/common-input';
 import { EmptyTargetForm } from './empty-target-form';
+import { parentToIframeEventEmitter } from '../../util/messageEvent';
 
 const FormContainer = styled.div`
   display: flex;
@@ -63,6 +64,27 @@ export function ObserverControlsForm() {
     }
   };
 
+  console.log(currentTarget);
+
+  const handleClickTargetActiveButton = () => {
+    // rootMargin을 추가하기
+    // postMessage 보내기
+    parentToIframeEventEmitter.emit({
+      key: 'drawTarget',
+      targetId: currentTarget?.targetId,
+    });
+  };
+
+  const handleClickRootActiveButton = () => {
+    parentToIframeEventEmitter.emit({
+      key: 'drawRoot',
+      rootClassName: currentTarget?.rootClassName,
+      targetId: currentTarget?.targetId,
+      threshold: currentTarget?.threshold,
+      rootMargin: currentTarget?.rootMargin,
+    });
+  };
+
   if (!currentTarget) {
     return <EmptyTargetForm />;
   }
@@ -83,11 +105,13 @@ export function ObserverControlsForm() {
               current-target
             </Label>
             <Button
+              type="button"
               backgroundColor={'#fff'}
               borderRadius={6}
               height={40}
               color={theme.colors.primary}
               borderColor={theme.colors.primary}
+              onClick={handleClickTargetActiveButton}
             >
               {currentTarget?.targetId}
             </Button>
@@ -98,11 +122,13 @@ export function ObserverControlsForm() {
               root
             </Label>
             <Button
+              type="button"
               backgroundColor={'#fff'}
               borderRadius={6}
               height={40}
               color={theme.colors.primary}
               borderColor={theme.colors.primary}
+              onClick={handleClickRootActiveButton}
             >
               {currentTarget?.rootClassName === null
                 ? 'null(browser)'
