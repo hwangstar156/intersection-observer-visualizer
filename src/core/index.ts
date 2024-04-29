@@ -27,6 +27,7 @@ interface CreateRectArgs {
   height: number;
   width: number;
   margin?: string;
+  duration?: number;
 }
 
 // const setOptions = (hashId: string | null) => {
@@ -288,7 +289,15 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
     }
   }
 
-  createActiveRectangle = ({ x, y, color, height, width, margin }: CreateRectArgs) => {
+  createActiveRectangle = ({
+    x,
+    y,
+    color,
+    height,
+    width,
+    margin,
+    duration = 1,
+  }: CreateRectArgs) => {
     const div = document.createElement('div');
 
     div.style.position = 'absolute';
@@ -298,7 +307,7 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
     div.style.border = `2px solid ${color}`;
     div.style.zIndex = '9999';
     div.style.pointerEvents = 'none'; // 이렇게 할 시 네모에 상호작용 안됨.
-    div.style.transition = 'opacity 20s ease-in';
+    div.style.transition = `opacity ${duration}s ease-in`;
 
     if (margin) {
       const marginArray = margin?.split(' ');
@@ -350,7 +359,7 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
     document.body.append(div);
   };
 
-  drawDocumentRect({ rootMargin }: { rootMargin?: string }) {
+  drawDocumentRect({ rootMargin, duration }: { rootMargin?: string; duration: number }) {
     const height = document.documentElement.clientHeight + document.documentElement.scrollTop - 10;
     const width = document.documentElement.clientWidth - 10;
 
@@ -361,6 +370,7 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
       height,
       width,
       margin: rootMargin,
+      duration,
     });
   }
 
@@ -378,31 +388,20 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
   }
 
   setEventDrawRootRect = () => {
-    console.log(this.id, this.targetId, 'init');
     parentToIframeEventEmitter.on((e) => {
-      console.log('ddw', e.data);
       const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
 
       if (!data.key || data.key !== 'drawRoot') {
         return;
       }
 
-      // console.log(data.targetId, this.targetId);
-
-      // if (Number(data.targetId[data.targetId.length - 1]) !== this.targetId) {
-      //   return;
-      // }
-
-      console.log(data.rootClassName);
-
       if (!data.rootClassName) {
-        this.drawDocumentRect({ rootMargin: data.rootMargin });
+        this.drawDocumentRect({ rootMargin: data.rootMargin, duration: data.duration });
         return;
       }
 
-      console.log('dataClassName', data.rootClassName);
-
       const element = document.getElementsByClassName(data.rootClassName)[0];
+
       const rectInfo = element.getBoundingClientRect();
 
       this.createActiveRectangle({
@@ -412,6 +411,7 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
         height: 0.75 * rectInfo.height,
         width: 0.75 * rectInfo.width,
         margin: data.rootMargin,
+        duration: data.duration,
       });
     });
   };
@@ -425,8 +425,16 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
       }
 
       const element = document.getElementsByClassName(data.targetId)[0];
+      const duration = data.duration;
 
-      element.setAttribute('style', 'outline: 1px solid blue');
+      element.setAttribute(
+        'style',
+        `outline: 2px solid blue; transition: outline ${duration}s ease-in`,
+      );
+
+      setTimeout(() => {
+        element.setAttribute('style', 'outline: none');
+      }, duration * 1000);
     });
   };
 

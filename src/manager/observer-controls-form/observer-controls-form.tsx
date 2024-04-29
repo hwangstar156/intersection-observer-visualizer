@@ -72,6 +72,7 @@ export function ObserverControlsForm() {
     parentToIframeEventEmitter.emit({
       key: 'drawTarget',
       targetId: currentTarget?.targetId,
+      duration,
     });
   };
 
@@ -82,6 +83,7 @@ export function ObserverControlsForm() {
       targetId: currentTarget?.targetId,
       threshold: currentTarget?.threshold,
       rootMargin: currentTarget?.rootMargin,
+      duration,
     });
   };
 
