@@ -29,7 +29,7 @@ const Container = styled.div<{ isOpen: boolean }>`
   ${({ isOpen }) =>
     !isOpen &&
     css`
-      transform: translate(-195px);
+      transform: translate(-240px);
     `}
 `;
 
@@ -109,102 +109,10 @@ export function LeftNavigationBar() {
     },
   });
 
-  useEffect(() => {
-    const createActiveRectangle = ({
-      x,
-      y,
-      bottom,
-      color,
-      height,
-      left,
-      right,
-      top,
-      width,
-    }: CreateRectArgs) => {
-      const div = document.createElement('div');
-
-      div.style.position = 'absolute';
-      div.style.left = `${x - 1}px`;
-      div.style.top = `${y - 1}px`;
-      div.style.width = `${width + 1}px`;
-      div.style.height = `${height + 1}px`;
-      div.style.border = `2px solid ${color}`;
-      div.style.zIndex = '1';
-      div.style.marginLeft = `${left}px`;
-      div.style.marginTop = `${top}px`;
-      div.style.marginRight = `${right - width}px`;
-      div.style.marginBottom = `${bottom - height}px`;
-      div.style.pointerEvents = 'none'; // 이렇게 할 시 네모에 상호작용 안됨.
-      // div.style.transform = 'scale(0.75)';
-      div.style.transition = 'opacity 100s ease-in';
-
-      requestAnimationFrame(() =>
-        requestAnimationFrame(() => {
-          div.style.opacity = '0';
-        }),
-      );
-
-      div.addEventListener('transitionend', () => {
-        document.body.removeChild(div);
-      });
-
-      document.body.append(div);
-    };
-
-    const drawRectByMessage = () => {
-      window.addEventListener('message', (e) => {
-        const entry = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-
-        if (!entry || !Object.keys(entry).some((key) => key === 'rootBounds')) {
-          return;
-        }
-
-        const rootBounds = entry.rootBounds;
-        const boundingClientRect = entry.boundingClientRect;
-        const $iframe = document.querySelector('.io-iframe');
-        const rect = $iframe?.getBoundingClientRect() as DOMRect;
-
-        const x = rect.left + window.scrollX - 1;
-        const y = rect.top + window.scrollY - 1;
-
-        if (!rootBounds) {
-          console.log('rootBounds가 없습니다.');
-          return;
-        }
-
-        createActiveRectangle({
-          x,
-          y,
-          bottom: 0.75 * rootBounds.bottom,
-          color: 'red',
-          height: 0.75 * rootBounds.height,
-          left: 0.75 * rootBounds.left,
-          right: 0.75 * rootBounds.right,
-          top: 0.75 * rootBounds.top,
-          width: 0.75 * rootBounds.width,
-        });
-
-        createActiveRectangle({
-          x,
-          y,
-          bottom: 0.75 * boundingClientRect.bottom,
-          color: 'blue',
-          height: 0.75 * boundingClientRect.height,
-          left: 0.75 * boundingClientRect.left,
-          right: 0.75 * boundingClientRect.right,
-          top: 0.75 * boundingClientRect.top,
-          width: 0.75 * boundingClientRect.width,
-        });
-      });
-    };
-
-    // drawRectByMessage();
-  }, []);
-
   return (
     <Container isOpen={isOpen}>
       <NavigationBarHeader />
-      <TabWidget />
+      {isOpen ? <TabWidget /> : null}
       {isOpen ? (
         <>
           {match(currentTab)
