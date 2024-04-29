@@ -427,10 +427,7 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
       const element = document.getElementsByClassName(data.targetId)[0];
       const duration = data.duration;
 
-      element.setAttribute(
-        'style',
-        `outline: 2px solid blue; transition: outline ${duration}s ease-in`,
-      );
+      element.setAttribute('style', `outline: 2px solid blue;`);
 
       setTimeout(() => {
         element.setAttribute('style', 'outline: none');
