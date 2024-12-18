@@ -1,11 +1,18 @@
-import { IntersectionObserverVisualizer } from '.';
+import { on } from '../util/custom-event';
+import { IntersectionObserverVisualizerWrapper } from './wrapper';
 
 interface InitializerParams {
   allEnabled?: boolean;
 }
 
 export const initializer = ({ allEnabled }: InitializerParams) => {
-  window.IntersectionObserver = IntersectionObserverVisualizer;
+  window.IntersectionObserver = IntersectionObserverVisualizerWrapper();
+
+  on(window, '@submit', (e) => {
+    console.log('submit 실행');
+    window.IntersectionObserver = IntersectionObserverVisualizerWrapper();
+  });
+
   window.__IOV_ALL_ENABLED__ = allEnabled;
 };
 

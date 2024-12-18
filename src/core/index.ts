@@ -1,23 +1,12 @@
 // 사용자에게 제공해야될 옵션..?
 
+import { emit } from '../util/custom-event';
 import { iframeToParentEventEmitter, parentToIframeEventEmitter } from '../util/messageEvent';
 
 const intersectDecorator =
   (func: IntersectionObserverCallback) =>
   (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
     func(entries, observer);
-
-    // entries.forEach((entry) => {
-    //   window.parent.postMessage(
-    //     JSON.stringify({
-    //       rootBounds: entry.rootBounds,
-    //       boundingClientRect: entry.boundingClientRect,
-    //     }),
-    //     {
-    //       targetOrigin: '*',
-    //     },
-    //   );
-    // });
   };
 
 interface CreateRectArgs {
@@ -29,26 +18,6 @@ interface CreateRectArgs {
   margin?: string;
   duration?: number;
 }
-
-// const setOptions = (hashId: string | null) => {
-//   //TODO: 제일 먼저 실행되도록 빼기
-//   on<IntersectionObserverOptionFormType>(window, '@submit', (e) => {
-//     alert('됨');
-//     const { bottom, left, right, threshold, top } = e.detail;
-//     const rootMargin = `${top.value}${top.cssLengthUnit} ${right.value}${right.cssLengthUnit} ${bottom.value}${bottom.cssLengthUnit} ${left.value}${left.cssLengthUnit}`;
-
-//     const customOptions = {
-//       root: hashId,
-//       rootMargin,
-//       threshold: threshold.value,
-//     };
-
-//     sessionStorage.setItem(
-//       '__INTERSECTION_OBSERVER_VISUALIZER_CUSTOM_OPTIONS__',
-//       JSON.stringify(customOptions),
-//     );
-//   });
-// };
 
 const reverseSign = (str?: string) => {
   if (!str) {
@@ -110,7 +79,17 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
 
     const enabled = !!(!isExternalObserver && (window.__IOV_ALL_ENABLED__ || options?.enabled));
 
-    super(enabled ? intersectDecorator(callback) : callback, options);
+    let customOptions;
+
+    customOptions = localStorage.getItem('__INTERSECTION_OBSERVER_VISUALIZER_CUSTOM_OPTIONS__');
+
+    const parsedCustomOptions = customOptions
+      ? { ...JSON.parse(customOptions), root: options?.root }
+      : null;
+
+    const finalOptions = parsedCustomOptions || options;
+
+    super(enabled ? intersectDecorator(callback) : callback, finalOptions);
 
     if (!options?.root) {
       this.iovRoot = document;
@@ -130,10 +109,12 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
     }
 
     this.enabled = enabled;
-    this.options = options;
+    this.options = finalOptions;
     this.visualizerInitMap = new Map();
     this.isInitCache = false;
     this.targetId = 0;
+
+    this.initOptionEventListener();
     this.initWhenExistCache();
     this.setEventDrawRootRect();
     this.setEventDrawTargetRect();
@@ -164,6 +145,44 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
       ...IntersectionObserverVisualizer.tempIdCachedMap,
     ]);
   }
+
+  initOptionEventListener = () => {
+    //TODO: 제일 먼저 실행되도록 빼기
+    parentToIframeEventEmitter.on((e) => {
+      const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+
+      if (!data.key || data.key !== 'optionData') {
+        return;
+      }
+
+      const customOptions = {
+        rootMargin: `-100px -100px -100px -100px`,
+        threshold: 0,
+        enabled: true,
+      };
+
+      localStorage.setItem(
+        '__INTERSECTION_OBSERVER_VISUALIZER_CUSTOM_OPTIONS__',
+        JSON.stringify(customOptions),
+      );
+
+      emit(window, '@submit', '');
+
+      // const { bottom, left, right, threshold, top } = e.detail;
+      // const rootMargin = `${top.value}${top.cssLengthUnit} ${right.value}${right.cssLengthUnit} ${bottom.value}${bottom.cssLengthUnit} ${left.value}${left.cssLengthUnit}`;
+
+      // const customOptions = {
+      //   root: hashId,
+      //   rootMargin,
+      //   threshold: threshold.value,
+      // };
+
+      // localStorage.setItem(
+      //   '__INTERSECTION_OBSERVER_VISUALIZER_CUSTOM_OPTIONS__',
+      //   JSON.stringify(customOptions),
+      // );
+    });
+  };
 
   initWhenExistCache() {
     const cache = IntersectionObserverVisualizer.idCachedMap.get(window.location.pathname);
@@ -200,6 +219,8 @@ export class IntersectionObserverVisualizer extends IntersectionObserver {
           id: cache[cacheIdx].id,
           isDocumentRoot: this.iovRoot instanceof Document,
           currentPath: window.location.pathname,
+          rootMargin: this.options?.rootMargin,
+          threshold: this.options?.threshold,
         });
 
         this.isInitCache = true;
