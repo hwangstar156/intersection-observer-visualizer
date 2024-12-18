@@ -14,6 +14,7 @@ import { useEffect } from 'react';
 import { useCurrentId } from './context/currentId';
 import { match } from 'ts-pattern';
 import { ObserverControlsForm } from './observer-controls-form/observer-controls-form';
+import { parentToIframeEventEmitter } from '../util/messageEvent';
 
 const Container = styled.div<{ isOpen: boolean }>`
   width: 300px;
@@ -105,7 +106,8 @@ export function LeftNavigationBar() {
     initialValues,
     onSubmit: (values) => {
       // customEvent로 values 정보 보내기
-      emit(window, '@submit', values);
+
+      parentToIframeEventEmitter.emit(JSON.stringify({ key: 'optionData', data: values }));
     },
   });
 
